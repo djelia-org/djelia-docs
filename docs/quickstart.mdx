@@ -1,0 +1,293 @@
+---
+sidebar_position: 2
+title: Quickstart
+description: Make your first Djelia call in about a minute, in your language.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Quickstart
+
+Djelia speaks the OpenAI protocol, so you use the OpenAI SDK for your language. There
+is no Djelia library to install.
+
+## 1. Get a key
+
+Create one in the [Djelia Console](https://console.djelia.cloud) and put it in your
+environment:
+
+```bash
+export DJELIA_API_KEY="your-api-key"
+```
+
+## 2. Install the OpenAI SDK
+
+<Tabs groupId="language" queryString>
+<TabItem value="python" label="Python">
+
+```bash
+pip install openai
+```
+
+</TabItem>
+<TabItem value="node" label="JavaScript">
+
+```bash
+npm install openai
+```
+
+</TabItem>
+<TabItem value="go" label="Go">
+
+```bash
+go get github.com/openai/openai-go/v3
+```
+
+</TabItem>
+<TabItem value="curl" label="curl">
+
+Nothing to install.
+
+</TabItem>
+</Tabs>
+
+## 3. Make Bambara speech
+
+<Tabs groupId="language" queryString>
+<TabItem value="python" label="Python">
+
+```python
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ["DJELIA_API_KEY"],
+    base_url="https://djelia.cloud/openai/v1",
+)
+
+speech = client.audio.speech.create(
+    model="djelia-tts-v2",
+    input="Aw ni ce, i ka kene wa?",
+    voice="moussa",
+)
+speech.write_to_file("hello.mp3")
+```
+
+</TabItem>
+<TabItem value="node" label="JavaScript">
+
+```javascript
+import OpenAI from "openai";
+import fs from "node:fs";
+
+const client = new OpenAI({
+  apiKey: process.env.DJELIA_API_KEY,
+  baseURL: "https://djelia.cloud/openai/v1",
+});
+
+const speech = await client.audio.speech.create({
+  model: "djelia-tts-v2",
+  input: "Aw ni ce, i ka kene wa?",
+  voice: "moussa",
+});
+
+fs.writeFileSync("hello.mp3", Buffer.from(await speech.arrayBuffer()));
+```
+
+</TabItem>
+<TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"context"
+	"io"
+	"os"
+
+	"github.com/openai/openai-go/v3"
+	"github.com/openai/openai-go/v3/option"
+)
+
+func main() {
+	client := openai.NewClient(
+		option.WithAPIKey(os.Getenv("DJELIA_API_KEY")),
+		option.WithBaseURL("https://djelia.cloud/openai/v1"),
+	)
+
+	res, err := client.Audio.Speech.New(context.TODO(), openai.AudioSpeechNewParams{
+		Model: "djelia-tts-v2",
+		Input: "Aw ni ce, i ka kene wa?",
+		Voice: openai.AudioSpeechNewParamsVoiceUnion{OfString: openai.String("moussa")},
+	})
+	if err != nil {
+		panic(err)
+	}
+	defer res.Body.Close()
+
+	out, _ := os.Create("hello.mp3")
+	defer out.Close()
+	io.Copy(out, res.Body)
+}
+```
+
+</TabItem>
+<TabItem value="curl" label="curl">
+
+```bash
+curl https://djelia.cloud/openai/v1/audio/speech \
+  -H "Authorization: Bearer $DJELIA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "djelia-tts-v2",
+    "input": "Aw ni ce, i ka kene wa?",
+    "voice": "moussa"
+  }' \
+  --output hello.mp3
+```
+
+</TabItem>
+</Tabs>
+
+You now have an mp3 of Bambara speech. `Aw ni ce, i ka kene wa?` is "Hello, how are you?"
+
+## 4. Read it back
+
+<Tabs groupId="language" queryString>
+<TabItem value="python" label="Python">
+
+```python
+transcript = client.audio.transcriptions.create(
+    file=open("hello.mp3", "rb"),
+    model="djelia-asr-v2",
+)
+print(transcript.text)
+```
+
+</TabItem>
+<TabItem value="node" label="JavaScript">
+
+```javascript
+const transcript = await client.audio.transcriptions.create({
+  file: fs.createReadStream("hello.mp3"),
+  model: "djelia-asr-v2",
+});
+
+console.log(transcript.text);
+```
+
+</TabItem>
+<TabItem value="go" label="Go">
+
+```go
+audio, _ := os.Open("hello.mp3")
+defer audio.Close()
+
+transcript, err := client.Audio.Transcriptions.New(context.TODO(),
+	openai.AudioTranscriptionNewParams{
+		File:  audio,
+		Model: "djelia-asr-v2",
+	})
+if err != nil {
+	panic(err)
+}
+fmt.Println(transcript.Text)
+```
+
+</TabItem>
+<TabItem value="curl" label="curl">
+
+```bash
+curl https://djelia.cloud/openai/v1/audio/transcriptions \
+  -H "Authorization: Bearer $DJELIA_API_KEY" \
+  -F file=@hello.mp3 \
+  -F model=djelia-asr-v2
+```
+
+</TabItem>
+</Tabs>
+
+```text
+Aw ni ce, i ka kɛnɛ wa?
+```
+
+## 5. Translate text
+
+Text translation is addressed as a chat model. The language pair is a
+[Djelia extension](/extensions), because a chat request has nowhere else to carry it.
+
+<Tabs groupId="language" queryString>
+<TabItem value="python" label="Python">
+
+```python
+completion = client.chat.completions.create(
+    model="djelia-translate-v1",
+    messages=[{"role": "user", "content": "Bonjour, comment allez-vous ?"}],
+    extra_body={"djelia": {"source_language": "fra_Latn", "target_language": "bam_Latn"}},
+)
+print(completion.choices[0].message.content)
+```
+
+</TabItem>
+<TabItem value="node" label="JavaScript">
+
+```javascript
+const completion = await client.chat.completions.create({
+  model: "djelia-translate-v1",
+  messages: [{ role: "user", content: "Bonjour, comment allez-vous ?" }],
+  ...{ djelia: { source_language: "fra_Latn", target_language: "bam_Latn" } },
+});
+
+console.log(completion.choices[0].message.content);
+```
+
+</TabItem>
+<TabItem value="go" label="Go">
+
+```go
+chat, err := client.Chat.Completions.New(context.TODO(),
+	openai.ChatCompletionNewParams{
+		Model: "djelia-translate-v1",
+		Messages: []openai.ChatCompletionMessageParamUnion{
+			openai.UserMessage("Bonjour, comment allez-vous ?"),
+		},
+	},
+	option.WithJSONSet("djelia", map[string]string{
+		"source_language": "fra_Latn",
+		"target_language": "bam_Latn",
+	}),
+)
+if err != nil {
+	panic(err)
+}
+fmt.Println(chat.Choices[0].Message.Content)
+```
+
+</TabItem>
+<TabItem value="curl" label="curl">
+
+```bash
+curl https://djelia.cloud/openai/v1/chat/completions \
+  -H "Authorization: Bearer $DJELIA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "djelia-translate-v1",
+    "messages": [{"role": "user", "content": "Bonjour, comment allez-vous ?"}],
+    "djelia": {"source_language": "fra_Latn", "target_language": "bam_Latn"}
+  }'
+```
+
+</TabItem>
+</Tabs>
+
+```text
+Nbá, í ni sɔ̀gɔmà ?
+```
+
+## Next
+
+- **[Djelia extensions](/extensions)** for prompt-steerable voices, telephony formats and the language pair
+- **[Models](/models)** for what each model is good at, and the OpenAI aliases
+- **[API reference](/api)** for every endpoint and field
+- **[Errors](/errors)** for the envelope and what each status means

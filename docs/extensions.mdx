@@ -1,0 +1,143 @@
+---
+sidebar_position: 4
+title: Djelia extensions
+description: The capabilities OpenAI's request shape has no slot for.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Djelia extensions
+
+Some of what Djelia does has no field in the OpenAI request shape: a free-text voice
+description, a translation language pair, telephony audio formats. Those ride in a
+`djelia` object in the request body, following the convention Google uses for Gemini's
+compatibility layer.
+
+## How to send it
+
+This is the one place where the SDKs differ from each other, because each exposes
+arbitrary body fields its own way.
+
+<Tabs groupId="language" queryString>
+<TabItem value="python" label="Python">
+
+`extra_body` is a first-class parameter.
+
+```python
+client.audio.speech.create(
+    model="djelia-tts-v2",
+    input="Aw ni ce, i ka kene wa?",
+    voice="moussa",
+    extra_body={"djelia": {"description": "speaks slowly, warm and reassuring"}},
+)
+```
+
+</TabItem>
+<TabItem value="node" label="JavaScript">
+
+There is no `extra_body`. Unknown keys on the params object are sent as-is, and
+spreading them keeps TypeScript's excess property check quiet without a cast or a
+`@ts-expect-error`.
+
+```javascript
+await client.audio.speech.create({
+  model: "djelia-tts-v2",
+  input: "Aw ni ce, i ka kene wa?",
+  voice: "moussa",
+  ...{ djelia: { description: "speaks slowly, warm and reassuring" } },
+});
+```
+
+</TabItem>
+<TabItem value="go" label="Go">
+
+Use the `WithJSONSet` request option to add a field the struct does not define.
+
+```go
+res, err := client.Audio.Speech.New(context.TODO(),
+	openai.AudioSpeechNewParams{
+		Model: "djelia-tts-v2",
+		Input: "Aw ni ce, i ka kene wa?",
+		Voice: openai.AudioSpeechNewParamsVoiceUnion{OfString: openai.String("moussa")},
+	},
+	option.WithJSONSet("djelia", map[string]string{
+		"description": "speaks slowly, warm and reassuring",
+	}),
+)
+```
+
+</TabItem>
+<TabItem value="curl" label="curl">
+
+It is a plain top-level key in the JSON body.
+
+```bash
+curl https://djelia.cloud/openai/v1/audio/speech \
+  -H "Authorization: Bearer $DJELIA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "djelia-tts-v2",
+    "input": "Aw ni ce, i ka kene wa?",
+    "voice": "moussa",
+    "djelia": {"description": "speaks slowly, warm and reassuring"}
+  }' \
+  --output hello.mp3
+```
+
+</TabItem>
+</Tabs>
+
+:::note
+The `djelia` object exists only on the JSON endpoints, `/audio/speech` and
+`/chat/completions`. The multipart endpoints (`/audio/transcriptions`,
+`/audio/translations`) have no JSON body; their one extension, `language`, is a plain
+form field.
+:::
+
+## What you can set
+
+### Prompt-steerable voices with `djelia.description`
+
+`djelia-tts-v2` takes a free-text description of how the voice should sound, which the
+fixed OpenAI `voice` enum cannot express. It overrides `voice` entirely. Maximum 500
+characters.
+
+```python
+extra_body={"djelia": {"description": "an older man, speaking slowly and gravely"}}
+```
+
+Not supported by `djelia-tts-v1`, which selects a voice by numeric id. See
+`djelia.speaker`.
+
+### The translation pair with `djelia.source_language` and `djelia.target_language`
+
+Required on `/chat/completions`, which is how text translation is addressed. Codes are
+`bam_Latn`, `fra_Latn` and `eng_Latn`. A request with no pair, an unknown language, or
+the same language twice returns 400.
+
+```python
+extra_body={"djelia": {"source_language": "fra_Latn", "target_language": "bam_Latn"}}
+```
+
+### Streaming granularity with `djelia.chunk_size`
+
+Audio chunk size in seconds when streaming speech. Between 0.1 and 2.0, default 1.0.
+
+### Voice id for TTS v1 with `djelia.speaker`
+
+`djelia-tts-v1` selects a voice by numeric id, 0 to 4, default 1. `voice` and
+`djelia.description` do not apply to it, and neither does `stream_format`: v1 returns a
+complete file rather than a stream. Prefer `djelia-tts-v2` unless you specifically need
+v1's speakers.
+
+## Extensions to existing fields
+
+Two OpenAI fields accept values beyond what OpenAI defines, so they need no `djelia`
+object.
+
+**`response_format` on `/audio/speech`** additionally accepts `wav_8k` (PCM 8 kHz) and
+`ulaw_8k` (µ-law 8 kHz) for telephony pipelines, alongside the six OpenAI formats.
+
+**`language` on `/audio/translations`** selects `eng_Latn` (default) or `fra_Latn`.
+OpenAI's translation endpoint is English-only.
