@@ -11,25 +11,23 @@ work against Djelia by changing the base URL. For anything else there are two ro
 ## Generate a client from the OpenAPI spec
 
 Djelia publishes its spec at
-[`https://djelia.cloud/openapi.json`](https://djelia.cloud/openapi.json). It names its
-own host, so a generated client knows where to send requests without further
-configuration.
+[`https://djelia.cloud/api/v1/openapi.json`](https://djelia.cloud/api/v1/openapi.json),
+covering both the compatibility surface and the [legacy API](/legacy/native-api).
 
 ```bash
 npx @openapitools/openapi-generator-cli generate \
-  -i https://djelia.cloud/openapi.json \
+  -i https://djelia.cloud/api/v1/openapi.json \
   -g rust \
   -o djelia-rust
 ```
 
 Swap `-g` for your target: `rust`, `php`, `swift5`, `kotlin`, `elixir`, `dart`, `csharp`,
-`java`, and around fifty others. The spec covers both the compatibility surface and the
-[legacy API](/legacy/native-api).
+`java`, and around fifty others.
 
-:::note
-Not every generator reads the `servers` block. `openapi-python-client`, for example,
-still requires you to pass a base URL to its client constructor. The OpenAPITools
-generator above picks it up automatically.
+:::note Set the base URL yourself
+The spec describes the paths but does not yet name the host they hang off, so a
+generated client comes out with an empty base URL. Set it to `https://djelia.cloud`
+in whatever the generated client calls its configuration object.
 :::
 
 ## Call it over plain HTTP

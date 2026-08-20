@@ -9,7 +9,7 @@ import { themes as prismThemes } from "prism-react-renderer";
  * Point DJELIA_OPENAPI at the deployed spec to build against what is actually
  * running, which is the arrangement that keeps the reference from drifting:
  *
- *   DJELIA_OPENAPI=https://djelia.cloud/openapi.json npm run gen-api-docs djelia
+ *   DJELIA_OPENAPI=https://djelia.cloud/api/v1/openapi.json npm run gen-api-docs djelia
  *
  * The checked-in copy is the fallback so a clone builds without network access.
  */
@@ -85,7 +85,7 @@ const config: Config = {
           djelia: {
             specPath: OPENAPI_SPEC,
             outputDir: "docs/api",
-            downloadUrl: "https://djelia.cloud/openapi.json",
+            downloadUrl: "https://djelia.cloud/api/v1/openapi.json",
             sidebarOptions: {
               groupPathsBy: "tag",
               categoryLinkSource: "tag",
@@ -150,7 +150,7 @@ const config: Config = {
           title: "Build",
           items: [
             { label: "Console", href: "https://console.djelia.cloud" },
-            { label: "OpenAPI spec", href: "https://djelia.cloud/openapi.json" },
+            { label: "OpenAPI spec", href: "https://djelia.cloud/api/v1/openapi.json" },
             { label: "Python SDK", href: "https://github.com/djelia-org/djelia-python-sdk" },
           ],
         },
