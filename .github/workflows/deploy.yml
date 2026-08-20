@@ -25,9 +25,13 @@ jobs:
           cache: npm
       - run: npm ci
       # Build the reference from the running API so it cannot drift from it.
+      #
+      # The canonical location is /openapi.json. Until that ships, this is the
+      # path production serves; afterwards it 301s to the canonical one, so this
+      # keeps working either way.
       - run: npm run build
         env:
-          DJELIA_OPENAPI: https://djelia.cloud/openapi.json
+          DJELIA_OPENAPI: https://djelia.cloud/api/v1/openapi.json
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

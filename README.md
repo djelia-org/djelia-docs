@@ -23,14 +23,14 @@ a clone building without network access. Point `DJELIA_OPENAPI` at the live spec
 build against what is actually running:
 
 ```bash
-DJELIA_OPENAPI=https://djelia.cloud/openapi.json npm run build
+DJELIA_OPENAPI=https://djelia.cloud/api/v1/openapi.json npm run build
 ```
 
 Set that variable in CI. Refresh the snapshot occasionally so the offline fallback does
 not fall too far behind:
 
 ```bash
-curl -s https://djelia.cloud/openapi.json -o openapi/djelia.json
+curl -s https://djelia.cloud/api/v1/openapi.json -o openapi/djelia.json
 ```
 
 ## Deploying
@@ -42,7 +42,7 @@ Any static host works. The site is fully static, with no server runtime.
 | Build command | `npm run build` |
 | Output directory | `build` |
 | Node version | 20 or newer |
-| Environment | `DJELIA_OPENAPI=https://djelia.cloud/openapi.json` |
+| Environment | `DJELIA_OPENAPI=https://djelia.cloud/api/v1/openapi.json` |
 
 ### Cloudflare Pages
 
