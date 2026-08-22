@@ -32,3 +32,50 @@ not fall too far behind:
 ```bash
 curl -s https://djelia.cloud/api/v1/openapi.json -o openapi/djelia.json
 ```
+
+## Deploying
+
+Any static host works. The site is fully static, with no server runtime.
+
+| Setting | Value |
+| --- | --- |
+| Build command | `npm run build` |
+| Output directory | `build` |
+| Node version | 20 or newer |
+| Environment | `DJELIA_OPENAPI=https://djelia.cloud/api/v1/openapi.json` |
+
+### Cloudflare Pages
+
+Connect the repository, use the settings above, then add `docs.djelia.cloud` under
+**Custom domains**. Cloudflare gives you the CNAME target to add in Route 53, and
+provisions the certificate itself.
+
+### GitHub Pages
+
+`.github/workflows/deploy.yml` builds and publishes on every push to `main`. Enable it
+under **Settings → Pages → Source → GitHub Actions**. For a custom domain, add
+`docs.djelia.cloud` there and put the same name in `static/CNAME`.
+
+## Writing
+
+> **The pages in `docs/` are mirrored from `djelia-backend` and edits here are
+> overwritten.** They are written in that repository, under `djelia-docs/`, so that a
+> change to an endpoint and the change to its documentation land in one pull request.
+> A pull request against `docs/` in this repository will be undone by the next sync.
+
+What is edited here, and only here:
+
+- `sidebars.ts`, the structure. A new page needs an entry, which the sync cannot add.
+- `docusaurus.config.ts`, `src/`, `static/`, the shell and the branding.
+- `package.json`, dependencies.
+
+Conventions for the mirrored pages, which still apply wherever they are written:
+
+- One Markdown or MDX file each, ordered by `sidebar_position`.
+- Code samples in more than one language use `<Tabs groupId="language" queryString>`, so
+  a reader's choice follows them across pages and is shareable as a link.
+- Builds run with `onBrokenLinks` and `onBrokenAnchors` set to `throw`, so a bad internal
+  link fails CI rather than shipping.
+
+Every code sample in these docs has been run against the production API. Please keep it
+that way: if you cannot run it, say so in the page rather than guessing.
