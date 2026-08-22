@@ -64,7 +64,9 @@ const config: Config = {
         docs: {
           routeBasePath: "/",
           sidebarPath: "./sidebars.ts",
-          editUrl: "https://github.com/djelia-org/djelia-docs/tree/main/",
+          // No "Edit this page". The pages under docs/ are mirrored here from
+          // djelia-backend, which is private, so the link would 404 for a reader
+          // and an edit made here would be overwritten by the next sync.
           docItemComponent: "@theme/ApiItem",
         },
         blog: false,
