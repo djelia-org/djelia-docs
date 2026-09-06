@@ -1362,7 +1362,7 @@
     }
   },
   "info": {
-    "description": "Welcome to the **Djelia API Documentation**! 🎉\n\nDjelia is your gateway to powerful linguistic models tailored for African languages. We are proud to currently support **Bambara**, one of the most widely spoken languages in Mali. As we grow, we aim to include support for many more African languages.\n\n### Getting Started\nGet an API key from the [Djelia Console](https://console.djelia.cloud), then point any OpenAI-compatible client at Djelia:\n\n```python\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=\"YOUR_DJELIA_API_KEY\",\n    base_url=\"https://djelia.cloud/openai/v1\",\n)\n```\n\nThis is the primary surface. The native `/api/v1` and `/api/v2` endpoints take the same key in the `x-api-key` header.\n\n### Current Features\n- **Transcription Models**: Effortlessly transcribe audio into text using our Bambara models, with support for real-time streaming ✨.\n- **Translation Models**: Seamlessly translate between Bambara, French, and English, unlocking cross-lingual communication.\n- **Text-to-Speech Models**: [Experimental] Bring Bambara text to life with human-like speech synthesis.\n\n### What's Next?\nWe’re constantly improving and expanding. Soon, you can expect:\n- Support for additional African languages.\n- Advanced features to enhance your applications.\n\nWe’re thrilled to have you on board. Let’s build something extraordinary together! 🚀",
+    "description": "Welcome to the **Djelia API Documentation**! 🎉\n\nDjelia is your gateway to powerful linguistic models tailored for African languages. We are proud to currently support **Bambara**, one of the most widely spoken languages in Mali. As we grow, we aim to include support for many more African languages.\n\n### Getting Started\nGet an API key from the [Djelia Console](https://console.djelia.cloud), then point any OpenAI-compatible client at Djelia:\n\n```python\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=\"YOUR_DJELIA_API_KEY\",\n    base_url=\"https://api.djelia.cloud/openai/v1\",\n)\n```\n\nThis is the primary surface. The native `/api/v1` and `/api/v2` endpoints take the same key in the `x-api-key` header.\n\n### Current Features\n- **Transcription Models**: Effortlessly transcribe audio into text using our Bambara models, with support for real-time streaming ✨.\n- **Translation Models**: Seamlessly translate between Bambara, French, and English, unlocking cross-lingual communication.\n- **Text-to-Speech Models**: [Experimental] Bring Bambara text to life with human-like speech synthesis.\n\n### What's Next?\nWe’re constantly improving and expanding. Soon, you can expect:\n- Support for additional African languages.\n- Advanced features to enhance your applications.\n\nWe’re thrilled to have you on board. Let’s build something extraordinary together! 🚀",
     "title": "Djelia",
     "version": "0.1.0"
   },
@@ -1450,17 +1450,17 @@
           {
             "label": "Python",
             "lang": "Python",
-            "source": "import requests\n\nurl = \"https://djelia.cloud/api/v1/models/transcribe\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"multipart/form-data\"\n}\nfiles = {\n    \"file\": open(\"audio_file.wav\", \"rb\")\n}\nparams = {\n    \"translate_to_french\": True\n}\n\nresponse = requests.post(url, headers=headers, files=files, params=params)\nif response.status_code == 200:\n    print(\"Transcription:\", response.json())\nelse:\n    print(\"Failed to transcribe:\", response.status_code, response.text)"
+            "source": "import requests\n\nurl = \"https://api.djelia.cloud/api/v1/models/transcribe\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"multipart/form-data\"\n}\nfiles = {\n    \"file\": open(\"audio_file.wav\", \"rb\")\n}\nparams = {\n    \"translate_to_french\": True\n}\n\nresponse = requests.post(url, headers=headers, files=files, params=params)\nif response.status_code == 200:\n    print(\"Transcription:\", response.json())\nelse:\n    print(\"Failed to transcribe:\", response.status_code, response.text)"
           },
           {
             "label": "cURL",
             "lang": "cURL",
-            "source": "curl -X POST \"https://djelia.cloud/api/v1/models/transcribe\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-F \"file=@audio_file.wav\" \\\n-G --data-urlencode \"translate_to_french=true\""
+            "source": "curl -X POST \"https://api.djelia.cloud/api/v1/models/transcribe\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-F \"file=@audio_file.wav\" \\\n-G --data-urlencode \"translate_to_french=true\""
           },
           {
             "label": "Dart",
             "lang": "Dart",
-            "source": "import 'dart:convert';\nimport 'dart:io';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final url = Uri.parse('https://djelia.cloud/api/v1/models/transcribe');\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n  };\n  final queryParams = {'translate_to_french': 'true'};\n  final file = http.MultipartFile.fromBytes(\n    'file',\n    File('audio_file.wav').readAsBytesSync(),\n    filename: 'audio_file.wav',\n  );\n\n  final request = http.MultipartRequest('POST', url..replace(queryParameters: queryParams))\n    ..headers.addAll(headers)\n    ..files.add(file);\n\n  final response = await request.send();\n\n  if (response.statusCode == 200) {\n    final body = await response.stream.bytesToString();\n    print('Transcription: ${jsonDecode(body)}');\n  } else {\n    print('Failed to transcribe: ${response.statusCode}');\n  }\n}"
+            "source": "import 'dart:convert';\nimport 'dart:io';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final url = Uri.parse('https://api.djelia.cloud/api/v1/models/transcribe');\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n  };\n  final queryParams = {'translate_to_french': 'true'};\n  final file = http.MultipartFile.fromBytes(\n    'file',\n    File('audio_file.wav').readAsBytesSync(),\n    filename: 'audio_file.wav',\n  );\n\n  final request = http.MultipartRequest('POST', url..replace(queryParameters: queryParams))\n    ..headers.addAll(headers)\n    ..files.add(file);\n\n  final response = await request.send();\n\n  if (response.statusCode == 200) {\n    final body = await response.stream.bytesToString();\n    print('Transcription: ${jsonDecode(body)}');\n  } else {\n    print('Failed to transcribe: ${response.statusCode}');\n  }\n}"
           }
         ]
       }
@@ -1544,17 +1544,17 @@
           {
             "label": "Python",
             "lang": "Python",
-            "source": "import requests\n\nurl = \"https://djelia.cloud/api/v1/models/transcribe/stream\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n}\nfiles = {\n    \"file\": open(\"audio_file.wav\", \"rb\")\n}\nparams = {\n    \"translate_to_french\": True\n}\n\nresponse = requests.post(url, headers=headers, files=files, params=params, stream=True)\nfor line in response.iter_lines():\n    if line:\n        print(\"Streamed Response:\", line.decode('utf-8'))"
+            "source": "import requests\n\nurl = \"https://api.djelia.cloud/api/v1/models/transcribe/stream\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n}\nfiles = {\n    \"file\": open(\"audio_file.wav\", \"rb\")\n}\nparams = {\n    \"translate_to_french\": True\n}\n\nresponse = requests.post(url, headers=headers, files=files, params=params, stream=True)\nfor line in response.iter_lines():\n    if line:\n        print(\"Streamed Response:\", line.decode('utf-8'))"
           },
           {
             "label": "cURL",
             "lang": "cURL",
-            "source": "curl -X POST \"https://djelia.cloud/api/v1/models/transcribe/stream\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-F \"file=@audio_file.wav\" \\\n-G --data-urlencode \"translate_to_french=true\""
+            "source": "curl -X POST \"https://api.djelia.cloud/api/v1/models/transcribe/stream\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-F \"file=@audio_file.wav\" \\\n-G --data-urlencode \"translate_to_french=true\""
           },
           {
             "label": "Dart",
             "lang": "Dart",
-            "source": "import 'dart:convert';\nimport 'dart:io';\n\nvoid main() async {\n  final file = File('audio_file.wav');\n  final uri = Uri.parse('https://djelia.cloud/api/v1/models/transcribe/stream');\n  final request = HttpClientRequest();\n\n  final requestBody = await file.readAsBytes();\n  \n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"multipart/form-data\"\n  };\n\n  final queryParams = {'translate_to_french': 'true'};\n  final fullUri = uri.replace(queryParameters: queryParams);\n\n  final response = await HttpClient().postUrl(fullUri)\n    ..headers.addAll(headers)\n    ..add(requestBody);\n\n  final responseStream = await response.close();\n\n  await for (final data in responseStream.transform(utf8.decoder)) {\n    print('Streamed Response: $data');\n  }\n}"
+            "source": "import 'dart:convert';\nimport 'dart:io';\n\nvoid main() async {\n  final file = File('audio_file.wav');\n  final uri = Uri.parse('https://api.djelia.cloud/api/v1/models/transcribe/stream');\n  final request = HttpClientRequest();\n\n  final requestBody = await file.readAsBytes();\n  \n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"multipart/form-data\"\n  };\n\n  final queryParams = {'translate_to_french': 'true'};\n  final fullUri = uri.replace(queryParameters: queryParams);\n\n  final response = await HttpClient().postUrl(fullUri)\n    ..headers.addAll(headers)\n    ..add(requestBody);\n\n  final responseStream = await response.close();\n\n  await for (final data in responseStream.transform(utf8.decoder)) {\n    print('Streamed Response: $data');\n  }\n}"
           }
         ]
       }
@@ -1609,17 +1609,17 @@
           {
             "label": "Python",
             "lang": "Python",
-            "source": "import requests\n\nurl = \"https://djelia.cloud/api/v1/models/translate\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n}\npayload = {\n    \"text\": \"Bonjour\",\n    \"source\": \"fra_Latn\",\n    \"target\": \"bam_Latn\"\n}\n\nresponse = requests.post(url, json=payload, headers=headers)\nif response.status_code == 200:\n    print(\"Translation:\", response.json())\nelse:\n    print(\"Failed to translate:\", response.status_code, response.text)"
+            "source": "import requests\n\nurl = \"https://api.djelia.cloud/api/v1/models/translate\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n}\npayload = {\n    \"text\": \"Bonjour\",\n    \"source\": \"fra_Latn\",\n    \"target\": \"bam_Latn\"\n}\n\nresponse = requests.post(url, json=payload, headers=headers)\nif response.status_code == 200:\n    print(\"Translation:\", response.json())\nelse:\n    print(\"Failed to translate:\", response.status_code, response.text)"
           },
           {
             "label": "cURL",
             "lang": "cURL",
-            "source": "curl -X POST \"https://djelia.cloud/api/v1/models/translate\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"text\": \"Bonjour\",\n    \"source\": \"fra_Latn\",\n    \"target\": \"bam_Latn\"\n}' "
+            "source": "curl -X POST \"https://api.djelia.cloud/api/v1/models/translate\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"text\": \"Bonjour\",\n    \"source\": \"fra_Latn\",\n    \"target\": \"bam_Latn\"\n}' "
           },
           {
             "label": "Dart",
             "lang": "Dart",
-            "source": "import 'dart:convert';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final url = Uri.parse('https://djelia.cloud/api/v1/models/translate');\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n  };\n  final payload = {\n    \"text\": \"Bonjour\",\n    \"source\": \"fra_Latn\",\n    \"target\": \"bam_Latn\"\n  };\n\n  final response = await http.post(\n    url,\n    headers: headers,\n    body: jsonEncode(payload),\n  );\n\n  if (response.statusCode == 200) {\n    print(\"Translation: ${jsonDecode(response.body)}\");\n  } else {\n    print(\"Failed to translate: ${response.statusCode}, ${response.body}\");\n  }\n}"
+            "source": "import 'dart:convert';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final url = Uri.parse('https://api.djelia.cloud/api/v1/models/translate');\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n  };\n  final payload = {\n    \"text\": \"Bonjour\",\n    \"source\": \"fra_Latn\",\n    \"target\": \"bam_Latn\"\n  };\n\n  final response = await http.post(\n    url,\n    headers: headers,\n    body: jsonEncode(payload),\n  );\n\n  if (response.statusCode == 200) {\n    print(\"Translation: ${jsonDecode(response.body)}\");\n  } else {\n    print(\"Failed to translate: ${response.statusCode}, ${response.body}\");\n  }\n}"
           }
         ]
       }
@@ -1658,17 +1658,17 @@
           {
             "label": "Python",
             "lang": "Python",
-            "source": "import requests\n\nurl = \"https://djelia.cloud/api/v1/models/translate/supported-languages\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.get(url, headers=headers)\nif response.status_code == 200:\n    print(\"Supported Languages:\", response.json())\nelse:\n    print(\"Failed to fetch supported languages\")"
+            "source": "import requests\n\nurl = \"https://api.djelia.cloud/api/v1/models/translate/supported-languages\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n}\nresponse = requests.get(url, headers=headers)\nif response.status_code == 200:\n    print(\"Supported Languages:\", response.json())\nelse:\n    print(\"Failed to fetch supported languages\")"
           },
           {
             "label": "cURL",
             "lang": "cURL",
-            "source": "curl -X GET \"https://djelia.cloud/api/v1/models/translate/supported-languages\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-H \"accept: application/json\""
+            "source": "curl -X GET \"https://api.djelia.cloud/api/v1/models/translate/supported-languages\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-H \"accept: application/json\""
           },
           {
             "label": "Dart",
             "lang": "Dart",
-            "source": "import 'dart:convert';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n  };\n  final url = Uri.parse('https://djelia.cloud/api/v1/models/translate/supported-languages');\n  final response = await http.get(url, headers: headers);\n\n  if (response.statusCode == 200) {\n    print('Supported Languages: ${jsonDecode(response.body)}');\n  } else {\n    print('Failed to fetch supported languages: ${response.reasonPhrase}');\n  }\n}"
+            "source": "import 'dart:convert';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n  };\n  final url = Uri.parse('https://api.djelia.cloud/api/v1/models/translate/supported-languages');\n  final response = await http.get(url, headers: headers);\n\n  if (response.statusCode == 200) {\n    print('Supported Languages: ${jsonDecode(response.body)}');\n  } else {\n    print('Failed to fetch supported languages: ${response.reasonPhrase}');\n  }\n}"
           }
         ]
       }
@@ -1721,17 +1721,17 @@
           {
             "label": "Python",
             "lang": "Python",
-            "source": "import requests\n\nurl = \"https://djelia.cloud/api/v1/models/tts\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n}\npayload = {\n    \"text\": \"Aw ni ce\",\n    \"speaker\": 1\n}\n\nresponse = requests.post(url, headers=headers, json=payload)\nif response.status_code == 200:\n    with open(\"output.wav\", \"wb\") as f:\n        f.write(response.content)\n    print(\"Audio saved as output.wav\")\nelse:\n    print(\"Failed to generate audio:\", response.status_code, response.text)"
+            "source": "import requests\n\nurl = \"https://api.djelia.cloud/api/v1/models/tts\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n}\npayload = {\n    \"text\": \"Aw ni ce\",\n    \"speaker\": 1\n}\n\nresponse = requests.post(url, headers=headers, json=payload)\nif response.status_code == 200:\n    with open(\"output.wav\", \"wb\") as f:\n        f.write(response.content)\n    print(\"Audio saved as output.wav\")\nelse:\n    print(\"Failed to generate audio:\", response.status_code, response.text)"
           },
           {
             "label": "cURL",
             "lang": "cURL",
-            "source": "curl -X POST \"https://djelia.cloud/api/v1/models/tts\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"text\": \"Aw ni ce\",\n    \"speaker\": 1\n}' --output output.wav"
+            "source": "curl -X POST \"https://api.djelia.cloud/api/v1/models/tts\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"text\": \"Aw ni ce\",\n    \"speaker\": 1\n}' --output output.wav"
           },
           {
             "label": "Dart",
             "lang": "Dart",
-            "source": "import 'dart:convert';\nimport 'dart:io';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final url = Uri.parse('https://djelia.cloud/api/v1/models/tts');\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n  };\n  final payload = {\n    \"text\": \"Aw ni ce\",\n    \"speaker\": 1\n  };\n\n  final response = await http.post(\n    url,\n    headers: headers,\n    body: jsonEncode(payload),\n  );\n\n  if (response.statusCode == 200) {\n    final file = File('output.wav');\n    await file.writeAsBytes(response.bodyBytes);\n    print(\"Audio saved as output.wav\");\n  } else {\n    print(\"Failed to generate audio: ${response.statusCode}\");\n  }\n}"
+            "source": "import 'dart:convert';\nimport 'dart:io';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final url = Uri.parse('https://api.djelia.cloud/api/v1/models/tts');\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n  };\n  final payload = {\n    \"text\": \"Aw ni ce\",\n    \"speaker\": 1\n  };\n\n  final response = await http.post(\n    url,\n    headers: headers,\n    body: jsonEncode(payload),\n  );\n\n  if (response.statusCode == 200) {\n    final file = File('output.wav');\n    await file.writeAsBytes(response.bodyBytes);\n    print(\"Audio saved as output.wav\");\n  } else {\n    print(\"Failed to generate audio: ${response.statusCode}\");\n  }\n}"
           }
         ]
       }
@@ -1818,17 +1818,17 @@
           {
             "label": "Python",
             "lang": "Python",
-            "source": "import requests\n\nurl = \"https://djelia.cloud/api/v2/models/transcribe\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"multipart/form-data\"\n}\nfiles = {\n    \"file\": open(\"audio_file.wav\", \"rb\")\n}\nparams = {\n    \"translate_to_french\": True\n}\n\nresponse = requests.post(url, headers=headers, files=files, params=params)\nif response.status_code == 200:\n    print(\"Transcription:\", response.json())\nelse:\n    print(\"Failed to transcribe:\", response.status_code, response.text)"
+            "source": "import requests\n\nurl = \"https://api.djelia.cloud/api/v2/models/transcribe\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"multipart/form-data\"\n}\nfiles = {\n    \"file\": open(\"audio_file.wav\", \"rb\")\n}\nparams = {\n    \"translate_to_french\": True\n}\n\nresponse = requests.post(url, headers=headers, files=files, params=params)\nif response.status_code == 200:\n    print(\"Transcription:\", response.json())\nelse:\n    print(\"Failed to transcribe:\", response.status_code, response.text)"
           },
           {
             "label": "cURL",
             "lang": "cURL",
-            "source": "curl -X POST \"https://djelia.cloud/api/v2/models/transcribe\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-F \"file=@audio_file.wav\" \\\n-G --data-urlencode \"translate_to_french=true\""
+            "source": "curl -X POST \"https://api.djelia.cloud/api/v2/models/transcribe\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-F \"file=@audio_file.wav\" \\\n-G --data-urlencode \"translate_to_french=true\""
           },
           {
             "label": "Dart",
             "lang": "Dart",
-            "source": "import 'dart:convert';\nimport 'dart:io';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final url = Uri.parse('https://djelia.cloud/api/v2/models/transcribe');\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n  };\n  final queryParams = {'translate_to_french': 'true'};\n  final file = http.MultipartFile.fromBytes(\n    'file',\n    File('audio_file.wav').readAsBytesSync(),\n    filename: 'audio_file.wav',\n  );\n\n  final request = http.MultipartRequest('POST', url..replace(queryParameters: queryParams))\n    ..headers.addAll(headers)\n    ..files.add(file);\n\n  final response = await request.send();\n\n  if (response.statusCode == 200) {\n    final body = await response.stream.bytesToString();\n    print('Transcription: ${jsonDecode(body)}');\n  } else {\n    print('Failed to transcribe: ${response.statusCode}');\n  }\n}"
+            "source": "import 'dart:convert';\nimport 'dart:io';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final url = Uri.parse('https://api.djelia.cloud/api/v2/models/transcribe');\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n  };\n  final queryParams = {'translate_to_french': 'true'};\n  final file = http.MultipartFile.fromBytes(\n    'file',\n    File('audio_file.wav').readAsBytesSync(),\n    filename: 'audio_file.wav',\n  );\n\n  final request = http.MultipartRequest('POST', url..replace(queryParameters: queryParams))\n    ..headers.addAll(headers)\n    ..files.add(file);\n\n  final response = await request.send();\n\n  if (response.statusCode == 200) {\n    final body = await response.stream.bytesToString();\n    print('Transcription: ${jsonDecode(body)}');\n  } else {\n    print('Failed to transcribe: ${response.statusCode}');\n  }\n}"
           }
         ]
       }
@@ -1912,17 +1912,17 @@
           {
             "label": "Python",
             "lang": "Python",
-            "source": "import requests\n\nurl = \"https://djelia.cloud/api/v2/models/transcribe/stream\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n}\nfiles = {\n    \"file\": open(\"audio_file.wav\", \"rb\")\n}\nparams = {\n    \"translate_to_french\": True\n}\n\nresponse = requests.post(url, headers=headers, files=files, params=params, stream=True)\nfor line in response.iter_lines():\n    if line:\n        print(\"Streamed Response:\", line.decode('utf-8'))"
+            "source": "import requests\n\nurl = \"https://api.djelia.cloud/api/v2/models/transcribe/stream\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n}\nfiles = {\n    \"file\": open(\"audio_file.wav\", \"rb\")\n}\nparams = {\n    \"translate_to_french\": True\n}\n\nresponse = requests.post(url, headers=headers, files=files, params=params, stream=True)\nfor line in response.iter_lines():\n    if line:\n        print(\"Streamed Response:\", line.decode('utf-8'))"
           },
           {
             "label": "cURL",
             "lang": "cURL",
-            "source": "curl -X POST \"https://djelia.cloud/api/v2/models/transcribe/stream\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-F \"file=@audio_file.wav\" \\\n-G --data-urlencode \"translate_to_french=true\""
+            "source": "curl -X POST \"https://api.djelia.cloud/api/v2/models/transcribe/stream\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-F \"file=@audio_file.wav\" \\\n-G --data-urlencode \"translate_to_french=true\""
           },
           {
             "label": "Dart",
             "lang": "Dart",
-            "source": "import 'dart:convert';\nimport 'dart:io';\n\nvoid main() async {\n  final file = File('audio_file.wav');\n  final uri = Uri.parse('https://djelia.cloud/api/v2/models/transcribe/stream');\n  final request = HttpClientRequest();\n\n  final requestBody = await file.readAsBytes();\n  \n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"multipart/form-data\"\n  };\n\n  final queryParams = {'translate_to_french': 'true'};\n  final fullUri = uri.replace(queryParameters: queryParams);\n\n  final response = await HttpClient().postUrl(fullUri)\n    ..headers.addAll(headers)\n    ..add(requestBody);\n\n  final responseStream = await response.close();\n\n  await for (final data in responseStream.transform(utf8.decoder)) {\n    print('Streamed Response: $data');\n  }\n}"
+            "source": "import 'dart:convert';\nimport 'dart:io';\n\nvoid main() async {\n  final file = File('audio_file.wav');\n  final uri = Uri.parse('https://api.djelia.cloud/api/v2/models/transcribe/stream');\n  final request = HttpClientRequest();\n\n  final requestBody = await file.readAsBytes();\n  \n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"multipart/form-data\"\n  };\n\n  final queryParams = {'translate_to_french': 'true'};\n  final fullUri = uri.replace(queryParameters: queryParams);\n\n  final response = await HttpClient().postUrl(fullUri)\n    ..headers.addAll(headers)\n    ..add(requestBody);\n\n  final responseStream = await response.close();\n\n  await for (final data in responseStream.transform(utf8.decoder)) {\n    print('Streamed Response: $data');\n  }\n}"
           }
         ]
       }
@@ -1970,17 +1970,17 @@
           {
             "label": "Python",
             "lang": "Python",
-            "source": "import requests\n\nurl = \"https://djelia.cloud/api/v2/models/tts\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n}\n# Supported speaker names: \"Moussa\", \"Sekou\", \"Seydou\"\npayload = {\n    \"text\": \"Aw ni ce, i ka kene wa?\",\n    \"description\": \"Seydou speaks with a warm and natural voice\"\n}\n\nresponse = requests.post(url, headers=headers, json=payload)\nif response.status_code == 200:\n    with open(\"output.wav\", \"wb\") as f:\n        f.write(response.content)\n    print(\"Audio saved as output.wav\")\nelse:\n    print(\"Failed to generate audio:\", response.status_code, response.text)"
+            "source": "import requests\n\nurl = \"https://api.djelia.cloud/api/v2/models/tts\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n}\n# Supported speaker names: \"Moussa\", \"Sekou\", \"Seydou\"\npayload = {\n    \"text\": \"Aw ni ce, i ka kene wa?\",\n    \"description\": \"Seydou speaks with a warm and natural voice\"\n}\n\nresponse = requests.post(url, headers=headers, json=payload)\nif response.status_code == 200:\n    with open(\"output.wav\", \"wb\") as f:\n        f.write(response.content)\n    print(\"Audio saved as output.wav\")\nelse:\n    print(\"Failed to generate audio:\", response.status_code, response.text)"
           },
           {
             "label": "cURL",
             "lang": "cURL",
-            "source": "# Supported speaker names: \"Moussa\", \"Sekou\", \"Seydou\"\ncurl -X POST \"https://djelia.cloud/api/v2/models/tts\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"text\": \"Aw ni ce, i ka kene wa?\",\n    \"description\": \"Sekou speaks with a warm and natural voice\"\n}' --output output.wav"
+            "source": "# Supported speaker names: \"Moussa\", \"Sekou\", \"Seydou\"\ncurl -X POST \"https://api.djelia.cloud/api/v2/models/tts\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"text\": \"Aw ni ce, i ka kene wa?\",\n    \"description\": \"Sekou speaks with a warm and natural voice\"\n}' --output output.wav"
           },
           {
             "label": "Dart",
             "lang": "Dart",
-            "source": "import 'dart:convert';\nimport 'dart:io';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final url = Uri.parse('https://djelia.cloud/api/v2/models/tts');\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n  };\n  // Supported speaker names: \"Moussa\", \"Sekou\", \"Seydou\"\n  final payload = {\n    \"text\": \"Aw ni ce, i ka kene wa?\",\n    \"description\": \"Sekou speaks with a warm and natural voice\"\n  };\n\n  final response = await http.post(\n    url,\n    headers: headers,\n    body: jsonEncode(payload),\n  );\n\n  if (response.statusCode == 200) {\n    final file = File('output.wav');\n    await file.writeAsBytes(response.bodyBytes);\n    print(\"Audio saved as output.wav\");\n  } else {\n    print(\"Failed to generate audio: ${response.statusCode}\");\n  }\n}"
+            "source": "import 'dart:convert';\nimport 'dart:io';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final url = Uri.parse('https://api.djelia.cloud/api/v2/models/tts');\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n  };\n  // Supported speaker names: \"Moussa\", \"Sekou\", \"Seydou\"\n  final payload = {\n    \"text\": \"Aw ni ce, i ka kene wa?\",\n    \"description\": \"Sekou speaks with a warm and natural voice\"\n  };\n\n  final response = await http.post(\n    url,\n    headers: headers,\n    body: jsonEncode(payload),\n  );\n\n  if (response.statusCode == 200) {\n    final file = File('output.wav');\n    await file.writeAsBytes(response.bodyBytes);\n    print(\"Audio saved as output.wav\");\n  } else {\n    print(\"Failed to generate audio: ${response.statusCode}\");\n  }\n}"
           }
         ]
       }
@@ -2028,17 +2028,17 @@
           {
             "label": "Python",
             "lang": "Python",
-            "source": "import requests\n\nurl = \"https://djelia.cloud/api/v2/models/tts/stream\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n}\npayload = {\n    \"text\": \"Aw ni ce, i ka kene wa?\",\n    # Supported speaker names: \"Moussa\", \"Sekou\", \"Seydou\"\n    \"description\": \"Moussa speaks with a very clear voice and a friendly tone\",\n    \"chunk_size\": 0.5\n}\n\n# Stream the audio and save chunks\nwith open(\"output.wav\", \"wb\") as f:\n    response = requests.post(url, headers=headers, json=payload, stream=True)\n    if response.status_code == 200:\n        for chunk in response.iter_content(chunk_size=8192):\n            if chunk:\n                f.write(chunk)\n        print(\"Audio saved as output.wav\")\n    else:\n        print(\"Failed to generate audio:\", response.status_code, response.text)"
+            "source": "import requests\n\nurl = \"https://api.djelia.cloud/api/v2/models/tts/stream\"\nheaders = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n}\npayload = {\n    \"text\": \"Aw ni ce, i ka kene wa?\",\n    # Supported speaker names: \"Moussa\", \"Sekou\", \"Seydou\"\n    \"description\": \"Moussa speaks with a very clear voice and a friendly tone\",\n    \"chunk_size\": 0.5\n}\n\n# Stream the audio and save chunks\nwith open(\"output.wav\", \"wb\") as f:\n    response = requests.post(url, headers=headers, json=payload, stream=True)\n    if response.status_code == 200:\n        for chunk in response.iter_content(chunk_size=8192):\n            if chunk:\n                f.write(chunk)\n        print(\"Audio saved as output.wav\")\n    else:\n        print(\"Failed to generate audio:\", response.status_code, response.text)"
           },
           {
             "label": "cURL",
             "lang": "cURL",
-            "source": "# Supported speaker names: \"Moussa\", \"Sekou\", \"Seydou\"\ncurl -X POST \"https://djelia.cloud/api/v2/models/tts/stream\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"text\": \"Aw ni ce, i ka kene wa?\",\n    \"description\": \"Moussa speaks with a very clear voice and a friendly tone\",\n    \"chunk_size\": 0.5\n}' --output output.wav"
+            "source": "# Supported speaker names: \"Moussa\", \"Sekou\", \"Seydou\"\ncurl -X POST \"https://api.djelia.cloud/api/v2/models/tts/stream\" \\\n-H \"x-api-key: YOUR_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"text\": \"Aw ni ce, i ka kene wa?\",\n    \"description\": \"Moussa speaks with a very clear voice and a friendly tone\",\n    \"chunk_size\": 0.5\n}' --output output.wav"
           },
           {
             "label": "Dart",
             "lang": "Dart",
-            "source": "import 'dart:convert';\nimport 'dart:io';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final url = Uri.parse('https://djelia.cloud/api/v2/models/tts/stream');\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n  };\n  // Supported speaker names: \"Moussa\", \"Sekou\", \"Seydou\"\n  final payload = {\n    \"text\": \"Aw ni ce, i ka kene wa?\",\n    \"description\": \"Moussa speaks with a very clear voice and a friendly tone\",\n    \"chunk_size\": 0.5\n  };\n\n  final client = http.Client();\n  final request = http.Request('POST', url)\n    ..headers.addAll(headers)\n    ..body = jsonEncode(payload);\n\n  final response = await client.send(request);\n\n  if (response.statusCode == 200) {\n    final file = File('output.wav');\n    final sink = file.openWrite();\n    \n    await for (final chunk in response.stream) {\n      sink.add(chunk);\n    }\n    \n    await sink.close();\n    print(\"Audio saved as output.wav\");\n  } else {\n    print(\"Failed to generate audio: ${response.statusCode}\");\n  }\n  \n  client.close();\n}"
+            "source": "import 'dart:convert';\nimport 'dart:io';\nimport 'package:http/http.dart' as http;\n\nvoid main() async {\n  final url = Uri.parse('https://api.djelia.cloud/api/v2/models/tts/stream');\n  final headers = {\n    \"x-api-key\": \"YOUR_API_KEY\",\n    \"Content-Type\": \"application/json\"\n  };\n  // Supported speaker names: \"Moussa\", \"Sekou\", \"Seydou\"\n  final payload = {\n    \"text\": \"Aw ni ce, i ka kene wa?\",\n    \"description\": \"Moussa speaks with a very clear voice and a friendly tone\",\n    \"chunk_size\": 0.5\n  };\n\n  final client = http.Client();\n  final request = http.Request('POST', url)\n    ..headers.addAll(headers)\n    ..body = jsonEncode(payload);\n\n  final response = await client.send(request);\n\n  if (response.statusCode == 200) {\n    final file = File('output.wav');\n    final sink = file.openWrite();\n    \n    await for (final chunk in response.stream) {\n      sink.add(chunk);\n    }\n    \n    await sink.close();\n    print(\"Audio saved as output.wav\");\n  } else {\n    print(\"Failed to generate audio: ${response.statusCode}\");\n  }\n  \n  client.close();\n}"
           }
         ]
       }
@@ -2641,7 +2641,7 @@
   },
   "tags": [
     {
-      "description": "### The primary way to call Djelia\nThese endpoints follow the OpenAI convention, so any OpenAI-compatible client reaches Djelia by changing only its base URL, key and model name:\n\n```python\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=\"YOUR_DJELIA_API_KEY\",\n    base_url=\"https://djelia.cloud/openai/v1\",\n)\n```\n\nCapabilities with no slot in the OpenAI shape — prompt-steerable TTS voices, telephony audio formats — ride in `extra_body={\"djelia\": {...}}`. Parameters we cannot honour are accepted and ignored rather than rejected; each one is listed in the compatibility reference.",
+      "description": "### The primary way to call Djelia\nThese endpoints follow the OpenAI convention, so any OpenAI-compatible client reaches Djelia by changing only its base URL, key and model name:\n\n```python\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=\"YOUR_DJELIA_API_KEY\",\n    base_url=\"https://api.djelia.cloud/openai/v1\",\n)\n```\n\nCapabilities with no slot in the OpenAI shape — prompt-steerable TTS voices, telephony audio formats — ride in `extra_body={\"djelia\": {...}}`. Parameters we cannot honour are accepted and ignored rather than rejected; each one is listed in the compatibility reference.",
       "name": "OpenAI Compatibility"
     },
     {
