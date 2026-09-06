@@ -48,5 +48,5 @@ Nothing is charged for a stream that does not complete.
 
 ## The legacy surface
 
-The `/v1` and `/api/v2` routes are unaffected and keep FastAPI's `{"detail": ...}`
+The `/v1` and `/v2` routes are unaffected and keep FastAPI's `{"detail": ...}`
 error shape. See [Legacy API](/legacy/native-api).
