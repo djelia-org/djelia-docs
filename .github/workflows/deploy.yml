@@ -31,7 +31,7 @@ jobs:
       # keeps working either way.
       - run: npm run build
         env:
-          DJELIA_OPENAPI: https://djelia.cloud/api/v1/openapi.json
+          DJELIA_OPENAPI: https://api.djelia.cloud/v1/openapi.json
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

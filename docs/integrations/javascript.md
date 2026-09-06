@@ -14,7 +14,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
   apiKey: process.env.DJELIA_API_KEY,
-  baseURL: "https://djelia.cloud/openai/v1",
+  baseURL: "https://api.djelia.cloud/openai/v1",
 });
 ```
 

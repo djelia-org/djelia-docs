@@ -15,14 +15,14 @@ litellm.completion(
     model="openai/djelia-translate-v1",
     messages=[{"role": "user", "content": "Bonjour"}],
     extra_body={"djelia": {"source_language": "fra_Latn", "target_language": "bam_Latn"}},
-    api_base="https://djelia.cloud/openai/v1",
+    api_base="https://api.djelia.cloud/openai/v1",
     api_key="YOUR_DJELIA_API_KEY",
 )
 
 litellm.transcription(
     model="openai/djelia-asr-v2",
     file=open("audio.mp3", "rb"),
-    api_base="https://djelia.cloud/openai/v1",
+    api_base="https://api.djelia.cloud/openai/v1",
     api_key="YOUR_DJELIA_API_KEY",
 )
 
@@ -30,7 +30,7 @@ litellm.speech(
     model="openai/djelia-tts-v2",
     input="Aw ni ce",
     voice="moussa",
-    api_base="https://djelia.cloud/openai/v1",
+    api_base="https://api.djelia.cloud/openai/v1",
     api_key="YOUR_DJELIA_API_KEY",
 )
 ```
@@ -44,17 +44,17 @@ model_list:
   - model_name: djelia-translate
     litellm_params:
       model: openai/djelia-translate-v1
-      api_base: https://djelia.cloud/openai/v1
+      api_base: https://api.djelia.cloud/openai/v1
       api_key: os.environ/DJELIA_API_KEY
   - model_name: djelia-asr
     litellm_params:
       model: openai/djelia-asr-v2
-      api_base: https://djelia.cloud/openai/v1
+      api_base: https://api.djelia.cloud/openai/v1
       api_key: os.environ/DJELIA_API_KEY
   - model_name: djelia-tts
     litellm_params:
       model: openai/djelia-tts-v2
-      api_base: https://djelia.cloud/openai/v1
+      api_base: https://api.djelia.cloud/openai/v1
       api_key: os.environ/DJELIA_API_KEY
 ```
 

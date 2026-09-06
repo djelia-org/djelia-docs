@@ -20,7 +20,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_DJELIA_API_KEY",          # 1. your key
-    base_url="https://djelia.cloud/openai/v1",  # 2. the base URL
+    base_url="https://api.djelia.cloud/openai/v1",  # 2. the base URL
 )
 
 client.audio.speech.create(
@@ -52,7 +52,7 @@ learn beyond the model names.
 - **[API reference](/api)** is generated from the API's own OpenAPI spec
 - **[Djelia extensions](/extensions)** covers the capabilities OpenAI's shape has no slot for
 - **[Integrations](/integrations/python)** has per-language and per-framework guides
-- **[Legacy API](/legacy/native-api)** documents the older `/api/v1` and `/api/v2` routes
+- **[Legacy API](/legacy/native-api)** documents the older `/v1` and `/v2` routes
 
 ## Getting a key
 

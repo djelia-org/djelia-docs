@@ -32,7 +32,7 @@ The OpenAI SDKs look for `OPENAI_API_KEY` by default, so you pass the key explic
 ```python
 client = OpenAI(
     api_key=os.environ["DJELIA_API_KEY"],
-    base_url="https://djelia.cloud/openai/v1",
+    base_url="https://api.djelia.cloud/openai/v1",
 )
 ```
 

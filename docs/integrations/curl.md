@@ -11,7 +11,7 @@ no OpenAI SDK.
 ## Speech
 
 ```bash
-curl https://djelia.cloud/openai/v1/audio/speech \
+curl https://api.djelia.cloud/openai/v1/audio/speech \
   -H "Authorization: Bearer $DJELIA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -25,7 +25,7 @@ curl https://djelia.cloud/openai/v1/audio/speech \
 ## Transcription
 
 ```bash
-curl https://djelia.cloud/openai/v1/audio/transcriptions \
+curl https://api.djelia.cloud/openai/v1/audio/transcriptions \
   -H "Authorization: Bearer $DJELIA_API_KEY" \
   -F file=@hello.mp3 \
   -F model=djelia-asr-v2
@@ -34,7 +34,7 @@ curl https://djelia.cloud/openai/v1/audio/transcriptions \
 ## Translating speech to French
 
 ```bash
-curl https://djelia.cloud/openai/v1/audio/translations \
+curl https://api.djelia.cloud/openai/v1/audio/translations \
   -H "Authorization: Bearer $DJELIA_API_KEY" \
   -F file=@hello.mp3 \
   -F model=djelia-asr-v2 \
@@ -46,7 +46,7 @@ curl https://djelia.cloud/openai/v1/audio/translations \
 The `djelia` extension object is a plain top-level key in the JSON body.
 
 ```bash
-curl https://djelia.cloud/openai/v1/chat/completions \
+curl https://api.djelia.cloud/openai/v1/chat/completions \
   -H "Authorization: Bearer $DJELIA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -59,6 +59,6 @@ curl https://djelia.cloud/openai/v1/chat/completions \
 ## Listing models
 
 ```bash
-curl https://djelia.cloud/openai/v1/models \
+curl https://api.djelia.cloud/openai/v1/models \
   -H "Authorization: Bearer $DJELIA_API_KEY"
 ```

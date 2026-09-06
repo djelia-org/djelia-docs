@@ -17,7 +17,7 @@ import { generateText } from "ai";
 
 const djelia = createOpenAICompatible({
   name: "djelia",
-  baseURL: "https://djelia.cloud/openai/v1",
+  baseURL: "https://api.djelia.cloud/openai/v1",
   apiKey: process.env.DJELIA_API_KEY,
 });
 ```
