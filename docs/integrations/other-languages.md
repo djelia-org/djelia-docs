@@ -11,12 +11,12 @@ work against Djelia by changing the base URL. For anything else there are two ro
 ## Generate a client from the OpenAPI spec
 
 Djelia publishes its spec at
-[`https://api.djelia.cloud/api/v1/openapi.json`](https://api.djelia.cloud/api/v1/openapi.json),
+[`https://api.djelia.cloud/v1/openapi.json`](https://api.djelia.cloud/v1/openapi.json),
 covering both the compatibility surface and the [legacy API](/legacy/native-api).
 
 ```bash
 npx @openapitools/openapi-generator-cli generate \
-  -i https://api.djelia.cloud/api/v1/openapi.json \
+  -i https://api.djelia.cloud/v1/openapi.json \
   -g rust \
   -o djelia-rust
 ```

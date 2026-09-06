@@ -5,7 +5,7 @@ title: Legacy API
 
 # Legacy API
 
-Before the OpenAI-compatible surface, Djelia had its own endpoints under `/api/v1` and
+Before the OpenAI-compatible surface, Djelia had its own endpoints under `/v1` and
 `/api/v2`. They still work and existing integrations keep running, but they are in
 maintenance: new capabilities land on
 [`/openai/v1`](/quickstart) only.
@@ -16,7 +16,7 @@ If you are starting today, start there instead.
 
 | | Legacy | OpenAI-compatible |
 | --- | --- | --- |
-| Base | `https://api.djelia.cloud/api/v1`, `/api/v2` | `https://api.djelia.cloud/openai/v1` |
+| Base | `https://api.djelia.cloud/v1`, `/api/v2` | `https://api.djelia.cloud/openai/v1` |
 | Auth header | `x-api-key` | `Authorization: Bearer` (and `x-api-key`) |
 | Errors | `{"detail": "..."}` | [OpenAI envelope](/errors) |
 | Client | hand-written HTTP or the `djelia` package | any OpenAI SDK |
@@ -30,13 +30,13 @@ equivalent, and several things only exist on the new one.
 
 | Legacy | Replacement |
 | --- | --- |
-| `POST /api/v1/models/translate` | `POST /openai/v1/chat/completions` with `djelia.source_language` and `djelia.target_language` |
-| `GET /api/v1/models/translate/supported-languages` | See [Languages](/models#languages) |
-| `POST /api/v1/models/transcribe` | `POST /openai/v1/audio/transcriptions` with `model=djelia-asr-v1` |
+| `POST /v1/models/translate` | `POST /openai/v1/chat/completions` with `djelia.source_language` and `djelia.target_language` |
+| `GET /v1/models/translate/supported-languages` | See [Languages](/models#languages) |
+| `POST /v1/models/transcribe` | `POST /openai/v1/audio/transcriptions` with `model=djelia-asr-v1` |
 | `POST /api/v2/models/transcribe` | `POST /openai/v1/audio/transcriptions` with `model=djelia-asr-v2` |
-| `POST /api/v{1,2}/models/transcribe?translate_to_french=true` | `POST /openai/v1/audio/translations` with `language=fra_Latn` |
-| `POST /api/v{1,2}/models/transcribe/stream` | `POST /openai/v1/audio/transcriptions` with `stream=true` |
-| `POST /api/v1/models/tts` | `POST /openai/v1/audio/speech` with `model=djelia-tts-v1` and `djelia.speaker` |
+| `POST /v1/models/transcribe?translate_to_french=true`, `POST /api/v2/models/transcribe?translate_to_french=true` | `POST /openai/v1/audio/translations` with `language=fra_Latn` |
+| `POST /v1/models/transcribe/stream`, `POST /api/v2/models/transcribe/stream` | `POST /openai/v1/audio/transcriptions` with `stream=true` |
+| `POST /v1/models/tts` | `POST /openai/v1/audio/speech` with `model=djelia-tts-v1` and `djelia.speaker` |
 | `POST /api/v2/models/tts` | `POST /openai/v1/audio/speech` with `model=djelia-tts-v2` |
 | `POST /api/v2/models/tts/stream` | `POST /openai/v1/audio/speech` with `stream_format=sse` |
 
