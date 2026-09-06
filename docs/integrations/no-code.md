@@ -10,7 +10,7 @@ are always the same three:
 
 | Setting | Value |
 | --- | --- |
-| Base URL / API base | `https://djelia.cloud/openai/v1` |
+| Base URL / API base | `https://api.djelia.cloud/openai/v1` |
 | API key | your Djelia key |
 | Model | `djelia-translate-v1`, `djelia-asr-v2` or `djelia-tts-v2` |
 
@@ -27,7 +27,7 @@ WebUI at the proxy.
 ## n8n
 
 Use the **OpenAI** node with a custom credential: set the base URL to
-`https://djelia.cloud/openai/v1` and paste your key. For the language pair, the HTTP
+`https://api.djelia.cloud/openai/v1` and paste your key. For the language pair, the HTTP
 Request node is usually simpler than fighting the OpenAI node's fixed fields.
 
 ## Dify

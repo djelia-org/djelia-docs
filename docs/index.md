@@ -20,7 +20,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_DJELIA_API_KEY",          # 1. your key
-    base_url="https://djelia.cloud/openai/v1",  # 2. the base URL
+    base_url="https://api.djelia.cloud/openai/v1",  # 2. the base URL
 )
 
 client.audio.speech.create(

@@ -17,7 +17,7 @@ import (
 
 client := openai.NewClient(
 	option.WithAPIKey(os.Getenv("DJELIA_API_KEY")),
-	option.WithBaseURL("https://djelia.cloud/openai/v1"),
+	option.WithBaseURL("https://api.djelia.cloud/openai/v1"),
 )
 ```
 

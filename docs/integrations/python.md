@@ -15,7 +15,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.environ["DJELIA_API_KEY"],
-    base_url="https://djelia.cloud/openai/v1",
+    base_url="https://api.djelia.cloud/openai/v1",
 )
 ```
 

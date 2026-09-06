@@ -16,7 +16,7 @@ If you are starting today, start there instead.
 
 | | Legacy | OpenAI-compatible |
 | --- | --- | --- |
-| Base | `https://djelia.cloud/api/v1`, `/api/v2` | `https://djelia.cloud/openai/v1` |
+| Base | `https://api.djelia.cloud/api/v1`, `/api/v2` | `https://api.djelia.cloud/openai/v1` |
 | Auth header | `x-api-key` | `Authorization: Bearer` (and `x-api-key`) |
 | Errors | `{"detail": "..."}` | [OpenAI envelope](/errors) |
 | Client | hand-written HTTP or the `djelia` package | any OpenAI SDK |
@@ -45,10 +45,10 @@ equivalent, and several things only exist on the new one.
 Transcription is the easiest place to start, because it needs no extensions at all.
 
 ```diff
-- curl https://djelia.cloud/api/v2/models/transcribe \
+- curl https://api.djelia.cloud/api/v2/models/transcribe \
 -   -H "x-api-key: $DJELIA_API_KEY" \
 -   -F file=@audio.mp3
-+ curl https://djelia.cloud/openai/v1/audio/transcriptions \
++ curl https://api.djelia.cloud/openai/v1/audio/transcriptions \
 +   -H "Authorization: Bearer $DJELIA_API_KEY" \
 +   -F file=@audio.mp3 \
 +   -F model=djelia-asr-v2
