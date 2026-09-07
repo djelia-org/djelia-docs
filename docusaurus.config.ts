@@ -16,13 +16,9 @@ import { themes as prismThemes } from "prism-react-renderer";
 const OPENAPI_SPEC = process.env.DJELIA_OPENAPI ?? "openapi/djelia.json";
 
 /**
- * Deployed to GitHub Pages at djelia-org.github.io/djelia-docs by default.
- *
- * To serve it from docs.djelia.cloud instead, set both variables in the deploy
- * workflow and add the CNAME in Route 53:
- *
- *   DOCS_URL=https://docs.djelia.cloud
- *   DOCS_BASE_URL=/
+ * Served at docs.djelia.cloud: the deploy workflow sets both variables and
+ * static/CNAME keeps the custom domain across deploys. Without them a local
+ * build targets the GitHub Pages location, djelia-org.github.io/djelia-docs.
  */
 const url = process.env.DOCS_URL ?? "https://djelia-org.github.io";
 const baseUrl = process.env.DOCS_BASE_URL ?? "/djelia-docs/";
