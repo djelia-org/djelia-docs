@@ -32,6 +32,8 @@ jobs:
       - run: npm run build
         env:
           DJELIA_OPENAPI: https://api.djelia.cloud/v1/openapi.json
+          DOCS_URL: https://docs.djelia.cloud
+          DOCS_BASE_URL: /
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
