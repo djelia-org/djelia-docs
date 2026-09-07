@@ -28,7 +28,7 @@ extension keeps it quiet without a cast or a `@ts-expect-error`:
 
 ```typescript
 const completion = await client.chat.completions.create({
-  model: "djelia-translate-v1",
+  model: "banjugu-1",
   messages: [{ role: "user", content: "Bonjour, comment allez-vous ?" }],
   ...{ djelia: { source_language: "fra_Latn", target_language: "bam_Latn" } },
 });
@@ -43,7 +43,7 @@ Djelia's voice names need no such treatment: `voice` is typed permissively, so
 import fs from "node:fs";
 
 const speech = await client.audio.speech.create({
-  model: "djelia-tts-v2",
+  model: "jifili-1",
   input: "Aw ni ce, i ka kene wa?",
   voice: "moussa",
 });
@@ -56,7 +56,7 @@ fs.writeFileSync("hello.mp3", Buffer.from(await speech.arrayBuffer()));
 ```javascript
 const transcript = await client.audio.transcriptions.create({
   file: fs.createReadStream("hello.mp3"),
-  model: "djelia-asr-v2",
+  model: "sunjata-1",
 });
 
 console.log(transcript.text);

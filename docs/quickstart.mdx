@@ -12,11 +12,6 @@ import TabItem from "@theme/TabItem";
 Djelia speaks the OpenAI protocol, so you use the OpenAI SDK for your language. There
 is no Djelia library to install.
 
-:::note New API host
-Use `https://api.djelia.cloud` for new integrations, as shown below. The old form,
-`https://djelia.cloud/api/v1`, remains available until we announce a sunset date.
-:::
-
 ## 1. Get a key
 
 Create one in the [Djelia Console](https://console.djelia.cloud) and put it in your
@@ -72,7 +67,7 @@ client = OpenAI(
 )
 
 speech = client.audio.speech.create(
-    model="djelia-tts-v2",
+    model="jifili-1",
     input="Aw ni ce, i ka kene wa?",
     voice="moussa",
 )
@@ -92,7 +87,7 @@ const client = new OpenAI({
 });
 
 const speech = await client.audio.speech.create({
-  model: "djelia-tts-v2",
+  model: "jifili-1",
   input: "Aw ni ce, i ka kene wa?",
   voice: "moussa",
 });
@@ -122,7 +117,7 @@ func main() {
 	)
 
 	res, err := client.Audio.Speech.New(context.TODO(), openai.AudioSpeechNewParams{
-		Model: "djelia-tts-v2",
+		Model: "jifili-1",
 		Input: "Aw ni ce, i ka kene wa?",
 		Voice: openai.AudioSpeechNewParamsVoiceUnion{OfString: openai.String("moussa")},
 	})
@@ -145,7 +140,7 @@ curl https://api.djelia.cloud/openai/v1/audio/speech \
   -H "Authorization: Bearer $DJELIA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "djelia-tts-v2",
+    "model": "jifili-1",
     "input": "Aw ni ce, i ka kene wa?",
     "voice": "moussa"
   }' \
@@ -165,7 +160,7 @@ You now have an mp3 of Bambara speech. `Aw ni ce, i ka kene wa?` is "Hello, how 
 ```python
 transcript = client.audio.transcriptions.create(
     file=open("hello.mp3", "rb"),
-    model="djelia-asr-v2",
+    model="sunjata-1",
 )
 print(transcript.text)
 ```
@@ -176,7 +171,7 @@ print(transcript.text)
 ```javascript
 const transcript = await client.audio.transcriptions.create({
   file: fs.createReadStream("hello.mp3"),
-  model: "djelia-asr-v2",
+  model: "sunjata-1",
 });
 
 console.log(transcript.text);
@@ -192,7 +187,7 @@ defer audio.Close()
 transcript, err := client.Audio.Transcriptions.New(context.TODO(),
 	openai.AudioTranscriptionNewParams{
 		File:  audio,
-		Model: "djelia-asr-v2",
+		Model: "sunjata-1",
 	})
 if err != nil {
 	panic(err)
@@ -207,7 +202,7 @@ fmt.Println(transcript.Text)
 curl https://api.djelia.cloud/openai/v1/audio/transcriptions \
   -H "Authorization: Bearer $DJELIA_API_KEY" \
   -F file=@hello.mp3 \
-  -F model=djelia-asr-v2
+  -F model=sunjata-1
 ```
 
 </TabItem>
@@ -227,7 +222,7 @@ Text translation is addressed as a chat model. The language pair is a
 
 ```python
 completion = client.chat.completions.create(
-    model="djelia-translate-v1",
+    model="banjugu-1",
     messages=[{"role": "user", "content": "Bonjour, comment allez-vous ?"}],
     extra_body={"djelia": {"source_language": "fra_Latn", "target_language": "bam_Latn"}},
 )
@@ -239,7 +234,7 @@ print(completion.choices[0].message.content)
 
 ```javascript
 const completion = await client.chat.completions.create({
-  model: "djelia-translate-v1",
+  model: "banjugu-1",
   messages: [{ role: "user", content: "Bonjour, comment allez-vous ?" }],
   ...{ djelia: { source_language: "fra_Latn", target_language: "bam_Latn" } },
 });
@@ -253,7 +248,7 @@ console.log(completion.choices[0].message.content);
 ```go
 chat, err := client.Chat.Completions.New(context.TODO(),
 	openai.ChatCompletionNewParams{
-		Model: "djelia-translate-v1",
+		Model: "banjugu-1",
 		Messages: []openai.ChatCompletionMessageParamUnion{
 			openai.UserMessage("Bonjour, comment allez-vous ?"),
 		},
@@ -277,7 +272,7 @@ curl https://api.djelia.cloud/openai/v1/chat/completions \
   -H "Authorization: Bearer $DJELIA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "djelia-translate-v1",
+    "model": "banjugu-1",
     "messages": [{"role": "user", "content": "Bonjour, comment allez-vous ?"}],
     "djelia": {"source_language": "fra_Latn", "target_language": "bam_Latn"}
   }'

@@ -32,7 +32,7 @@ const djelia = createOpenAICompatible({
 
 ```typescript
 const { text } = await generateText({
-  model: djelia("djelia-translate-v1"),
+  model: djelia("banjugu-1"),
   prompt: "Bonjour, comment allez-vous ?",
   providerOptions: {
     djelia: { djelia: { source_language: "fra_Latn", target_language: "bam_Latn" } },
@@ -44,8 +44,7 @@ const { text } = await generateText({
 Nbá, í ni sɔ̀gɔmà ?
 ```
 
-The repetition is not a typo, and it is worth understanding before someone tidies it
-away.
+The two `djelia` keys serve different purposes.
 
 The outer `djelia` is the **provider name** you passed to `createOpenAICompatible`. That
 is how the AI SDK decides which provider a block of options belongs to. It then
@@ -53,19 +52,19 @@ is how the AI SDK decides which provider a block of options belongs to. It then
 sending it as a nested object. So the inner `djelia` is what survives that flattening
 and becomes the [extension object](/extensions) Djelia reads.
 
-Writing it once sends the fields bare at the top level, and the request fails:
+Using one key sends the fields at the top level, and the request fails:
 
 ```json
 // providerOptions: { djelia: { source_language: ..., target_language: ... } }
-{"model":"djelia-translate-v1","source_language":"fra_Latn","target_language":"bam_Latn","messages":[…]}
+{"model":"banjugu-1","source_language":"fra_Latn","target_language":"bam_Latn","messages":[…]}
 // → 400  djelia: Field required
 ```
 
-Writing it twice sends what Djelia expects:
+Using both keys sends the required request body:
 
 ```json
 // providerOptions: { djelia: { djelia: { source_language: ..., target_language: ... } } }
-{"model":"djelia-translate-v1","djelia":{"source_language":"fra_Latn","target_language":"bam_Latn"},"messages":[…]}
+{"model":"banjugu-1","djelia":{"source_language":"fra_Latn","target_language":"bam_Latn"},"messages":[…]}
 // → 200
 ```
 

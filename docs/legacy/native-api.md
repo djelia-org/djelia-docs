@@ -1,61 +1,16 @@
 ---
-sidebar_position: 1
-title: Legacy API
+sidebar_position: 9
+title: Native API (retired September 20, 2026)
+description: The djelia.cloud /v1 and /v2 endpoints are retired. Use the migration guide.
 ---
 
-# Legacy API
+# Native API
 
-Before the OpenAI-compatible surface, Djelia had its own endpoints under `/v1` and
-`/v2`. They still work and existing integrations keep running, but they are in
-maintenance: new capabilities land on
-[`/openai/v1`](/quickstart) only.
+The native endpoints on `djelia.cloud/api/v1`, `djelia.cloud/api/v2`,
+`api.djelia.cloud/v1`, and `api.djelia.cloud/v2` retire on September 20, 2026.
 
-If you are starting today, start there instead.
+Until then, deprecated requests return `Deprecation`, `Sunset`, and
+`Link: <successor>; rel="successor-version"` headers.
 
-## Differences
-
-| | Legacy | OpenAI-compatible |
-| --- | --- | --- |
-| Base | `https://api.djelia.cloud/v1`, `/v2` | `https://api.djelia.cloud/openai/v1` |
-| Auth header | `x-api-key` | `Authorization: Bearer` (and `x-api-key`) |
-| Errors | `{"detail": "..."}` | [OpenAI envelope](/errors) |
-| Client | hand-written HTTP or the `djelia` package | any OpenAI SDK |
-| Subtitles | not available | `srt`, `vtt` |
-| Audio formats | mp3, wav | mp3, opus, aac, flac, wav, pcm, wav_8k, ulaw_8k |
-
-The compatibility surface is a superset. Everything the legacy routes do has an
-equivalent, and several things only exist on the new one.
-
-## Endpoint mapping
-
-| Legacy | Replacement |
-| --- | --- |
-| `POST /v1/models/translate` | `POST /openai/v1/chat/completions` with `djelia.source_language` and `djelia.target_language` |
-| `GET /v1/models/translate/supported-languages` | See [Languages](/models#languages) |
-| `POST /v1/models/transcribe` | `POST /openai/v1/audio/transcriptions` with `model=djelia-asr-v1` |
-| `POST /v2/models/transcribe` | `POST /openai/v1/audio/transcriptions` with `model=djelia-asr-v2` |
-| `POST /v1/models/transcribe?translate_to_french=true`, `POST /v2/models/transcribe?translate_to_french=true` | `POST /openai/v1/audio/translations` with `language=fra_Latn` |
-| `POST /v1/models/transcribe/stream`, `POST /v2/models/transcribe/stream` | `POST /openai/v1/audio/transcriptions` with `stream=true` |
-| `POST /v1/models/tts` | `POST /openai/v1/audio/speech` with `model=djelia-tts-v1` and `djelia.speaker` |
-| `POST /v2/models/tts` | `POST /openai/v1/audio/speech` with `model=djelia-tts-v2` |
-| `POST /v2/models/tts/stream` | `POST /openai/v1/audio/speech` with `stream_format=sse` |
-
-## Migrating
-
-Transcription is the easiest place to start, because it needs no extensions at all.
-
-```diff
-- curl https://api.djelia.cloud/v2/models/transcribe \
--   -H "x-api-key: $DJELIA_API_KEY" \
--   -F file=@audio.mp3
-+ curl https://api.djelia.cloud/openai/v1/audio/transcriptions \
-+   -H "Authorization: Bearer $DJELIA_API_KEY" \
-+   -F file=@audio.mp3 \
-+   -F model=djelia-asr-v2
-```
-
-Both surfaces accept the same keys and bill against the same wallet, so you can move one
-endpoint at a time.
-
-The full legacy reference is in the [API reference](/api) alongside the compatibility
-surface.
+Use the [API migration guide](/migration) for every endpoint, request, response,
+streaming, and model-name mapping.

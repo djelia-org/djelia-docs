@@ -19,19 +19,23 @@ client = OpenAI(
 )
 ```
 
-Everything else is the OpenAI SDK you already know. Async works the same way with
-`AsyncOpenAI`.
+Use `AsyncOpenAI` for the asynchronous client.
 
 ## Djelia extensions
 
-`extra_body` is a first-class parameter:
+`extra_body` carries settings that have no OpenAI field. Text translation uses it for
+the language pair:
 
 ```python
-client.audio.speech.create(
-    model="djelia-tts-v2",
-    input="Aw ni ce, i ka kene wa?",
-    voice="moussa",
-    extra_body={"djelia": {"description": "speaks slowly, warm and reassuring"}},
+client.chat.completions.create(
+    model="banjugu-1",
+    messages=[{"role": "user", "content": "Bonjour"}],
+    extra_body={
+        "djelia": {
+            "source_language": "fra_Latn",
+            "target_language": "bam_Latn",
+        }
+    },
 )
 ```
 
@@ -39,7 +43,7 @@ client.audio.speech.create(
 
 ```python
 with client.audio.speech.with_streaming_response.create(
-    model="djelia-tts-v2",
+    model="jifili-1",
     input="Aw ni ce, i ka kene wa?",
     voice="moussa",
 ) as response:
@@ -51,7 +55,7 @@ with client.audio.speech.with_streaming_response.create(
 ```python
 srt = client.audio.transcriptions.create(
     file=open("interview.mp3", "rb"),
-    model="djelia-asr-v2",
+    model="sunjata-1",
     response_format="srt",
 )
 open("interview.srt", "w").write(srt)
@@ -59,7 +63,4 @@ open("interview.srt", "w").write(srt)
 
 ## The `djelia` package
 
-The [`djelia` package on PyPI](https://github.com/djelia-org/djelia-python-sdk) predates
-the compatibility surface and talks to the [legacy API](/legacy/native-api). It still
-works, and it is still maintained, but new integrations should use `openai` directly:
-it is better tested, better documented, and it is what the rest of these docs describe.
+The [`djelia` package on PyPI](https://github.com/djelia-org/djelia-python-sdk) was originally designed for the native `/api/v1` and `/api/v2` endpoints, which will be retired on September 20, 2026. The next version of the package will support the OpenAI-compatible API. In the meantime, we recommend using the `openai` package for new integrations—it is more thoroughly tested, better documented, and is the focus of the examples throughout these docs.

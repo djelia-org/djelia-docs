@@ -13,7 +13,7 @@ import os
 from langchain_openai import ChatOpenAI
 
 llm = ChatOpenAI(
-    model="djelia-translate-v1",
+    model="banjugu-1",
     api_key=os.environ["DJELIA_API_KEY"],
     base_url="https://api.djelia.cloud/openai/v1",
     extra_body={"djelia": {"source_language": "fra_Latn", "target_language": "bam_Latn"}},
@@ -31,7 +31,7 @@ composes like any other runnable:
 from langchain_core.prompts import ChatPromptTemplate
 
 to_bambara = ChatOpenAI(
-    model="djelia-translate-v1",
+    model="banjugu-1",
     api_key=os.environ["DJELIA_API_KEY"],
     base_url="https://api.djelia.cloud/openai/v1",
     extra_body={"djelia": {"source_language": "eng_Latn", "target_language": "bam_Latn"}},

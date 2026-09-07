@@ -1,57 +1,58 @@
 ---
-sidebar_position: 6
+sidebar_position: 7
 title: Field support
 description: Every OpenAI parameter Djelia accepts, honours, or ignores.
 ---
 
-# Field support
+# Field Support
 
-Parameters Djelia cannot honour are **accepted and ignored** rather than rejected, so an
-existing OpenAI integration keeps working when it is repointed here. Every ignored field
-is listed below, so nothing is silently surprising.
+The tables below clarify which fields Djelia fully supports, which it accepts for compatibility, and which are simply ignored. Fields Djelia cannot honor are silently accepted and disregarded—they are never rejected—ensuring that your existing OpenAI integrations continue working seamlessly when you switch endpoints. Every field that Djelia ignores is explicitly listed here for your reference.
 
 ## `POST /audio/speech`
 
-| Field | Status |
-| --- | --- |
-| `model` | Use a Djelia speech model |
-| `input` | Fully supported. Maximum 1000 characters |
-| `voice` | Supported on `djelia-tts-v2`. Djelia voices, with OpenAI names as aliases. Ignored by `djelia-tts-v1`, which uses `djelia.speaker` |
-| `response_format` | Supported: `mp3` (default), `opus`, `aac`, `flac`, `wav`, `pcm`, plus `wav_8k` and `ulaw_8k` |
-| `stream_format` | Supported on `djelia-tts-v2`: `audio` (default), `sse`. Ignored by `djelia-tts-v1`, which returns a complete file |
-| `speed` | **Ignored** |
-| `instructions` | **Ignored.** Use [`djelia.description`](/extensions) instead |
+| Field            | Status                                                                                                                               |
+|------------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| `model`          | Use `jifili-1`                                                                                                                      |
+| `input`          | Supported. Maximum 1000 characters.                                                                                                  |
+| `voice`          | `moussa`, `alloy`, `nova`, `coral`. The last three are OpenAI aliases that map to `moussa`. Any other value returns 400 `unsupported_voice`. |
+| `response_format`| `mp3` (default), `wav`, `pcm`, `opus`, `ulaw`, `alaw`, `l16_8000`, `l16_16000`, `fmp4`                                              |
+| `stream_format`  | `audio` (default) or `sse`                                                                                                          |
+| `speed`          | **Ignored**                                                                                                                          |
+| `instructions`   | **Ignored**                                                                                                                          |
 
-`pcm` is headerless 16-bit signed little-endian mono at 24 kHz, matching OpenAI.
+The `pcm` format is headerless 16-bit signed little-endian mono at 24 kHz, just like OpenAI. For `l16_8000` and `l16_16000`, the same structure is used, but at 8 kHz and 16 kHz sample rates, respectively.
+
+For more control over speech sampling, use the [Djelia extensions](/extensions#speech-sampling). Note that the legacy `djelia.description` and `djelia.speaker` fields are not recognized by the `jifili-1` model. While `djelia.chunk_size` is checked for validity, it is not applied—Djelia automatically determines the optimal streamed chunk size for your output.
 
 ## `POST /audio/transcriptions`
 
 | Field | Status |
 | --- | --- |
 | `file` | Fully supported |
-| `model` | Use a Djelia transcription model |
-| `response_format` | Supported: `json` (default), `text`, `verbose_json`, `srt`, `vtt` |
+| `model` | Use `sunjata-1` |
+| `response_format` | `json` (default), `text`, `verbose_json`, `srt`, `vtt` |
 | `stream` | Supported with `response_format` `json` or `text` |
 | `language` | **Ignored.** Djelia's ASR is Bambara-only |
 | `prompt` | **Ignored** |
-| `temperature` | **Ignored** |
+| `temperature` | Supported |
 | `timestamp_granularities` | **Ignored.** Segment timings are always returned in `verbose_json` |
 
 Djelia's ASR returns per-segment timings, so `verbose_json`, `srt` and `vtt` all carry
-real timestamps. Within `verbose_json` segments, `tokens`, `avg_logprob`,
-`compression_ratio` and `no_speech_prob` are always zero: the fields exist so the SDK
-response models parse, but Djelia does not produce those statistics.
+real timestamps. Within `verbose_json` segments, `tokens` is always an empty list, and
+`seek`, `temperature`, `avg_logprob`, `compression_ratio` and `no_speech_prob` are
+always 0: the fields exist so the SDK response models parse, but Djelia does not
+produce those statistics.
 
 ## `POST /audio/translations`
 
 | Field | Status |
 | --- | --- |
 | `file` | Fully supported |
-| `model` | Use a Djelia transcription model |
+| `model` | Use `sunjata-1` |
 | `response_format` | Supported: `json` (default), `text` |
 | `language` | **Djelia extension.** `eng_Latn` (default) or `fra_Latn`. OpenAI's endpoint is English-only |
 | `prompt` | **Ignored** |
-| `temperature` | **Ignored** |
+| `temperature` | Supported by the transcription step |
 
 `srt`, `vtt` and `verbose_json` return 400 here: translation does not preserve
 per-segment timings, so subtitle output would carry timings that no longer line up with
@@ -72,7 +73,7 @@ the language pair rides in [`djelia`](/extensions).
 
 | Field | Status |
 | --- | --- |
-| `model` | Use `djelia-translate-v1` |
+| `model` | Use `banjugu-1` |
 | `messages` | Supported. String content and `type: "text"` content parts both work |
 | `stream` | Supported |
 | `temperature`, `top_p`, `n`, `max_tokens`, `max_completion_tokens`, `stop` | **Ignored** |
@@ -91,3 +92,12 @@ billed for.
 Because translation is not incremental, `stream=True` emits the whole translation as a
 single content delta followed by the terminating chunk, rather than token-by-token
 output.
+
+## Request Limits
+
+- Speech input accepts up to 1,000 characters.
+- The `djelia.chunk_size` parameter must be set between 0.1 and 2.0 seconds.
+- Translation requires that the source and target languages are different, and both must be valid supported codes.
+- Speech translation responses are available only in `json` or `text` formats.
+
+If any request parameter is invalid, you’ll receive an error formatted according to [OpenAI’s style](/errors).

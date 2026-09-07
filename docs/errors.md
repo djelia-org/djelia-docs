@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 title: Errors
 ---
 
@@ -25,13 +25,20 @@ your existing error handling keeps working.
 | 401 | `authentication_error` | `AuthenticationError` |
 | 402 | `insufficient_quota` | `APIStatusError` |
 | 403 | `permission_error` | `PermissionDeniedError` |
-| 404 | `not_found_error` | `NotFoundError` |
+| 404 | `invalid_request_error` | `NotFoundError` |
+| 405 | `invalid_request_error` | `APIStatusError` |
+| 413 | `api_error` | `APIStatusError` |
+| 422 | `invalid_request_error` | `UnprocessableEntityError` |
 | 429 | `rate_limit_error` | `RateLimitError` |
 | 5xx | `api_error` | `InternalServerError` |
 
-An endpoint Djelia does not implement returns 404 in the same envelope, so
-`client.embeddings.create()` raises `NotFoundError` rather than a bare
-`APIStatusError`. A wrong method on a real path returns 405.
+If you request an unknown endpoint, you'll receive a 404 error with `code: "unknown_endpoint"`. In this case, methods like `client.embeddings.create()` will raise a `NotFoundError` instead of a general `APIStatusError`. If you use the wrong HTTP method on a valid endpoint, the API responds with a 405 status and `code: "method_not_allowed"`.
+
+Supplying an unknown or retired model identifier also results in a 404 error, with `code: "model_not_found"`. Please note that the models `djelia-asr-v1`, `djelia-asr-v2`, `djelia-tts-v1`, and `djelia-tts-v2` will be retired on September 20, 2026. Refer to the [model migration guide](/migration) for details on updating your usage.
+
+If you send audio that exceeds the supported size for transcription, the server returns a 413 error and `code: "audio_too_large"`.
+
+Attempting to use an unsupported `response_format` with `jifili-1` triggers a 422 error with `code: "invalid_request"`. The list of supported formats can be found in the [Field support](/field-support) documentation.
 
 ## Running out of credit
 
@@ -46,7 +53,10 @@ caller sees a truncated body on a 200 instead.
 
 Nothing is charged for a stream that does not complete.
 
-## The legacy surface
+## Validation and Limits
 
-The `/v1` and `/v2` routes are unaffected and keep FastAPI's `{"detail": ...}`
-error shape. See [Legacy API](/legacy/native-api).
+If your request includes invalid fields or values, the server responds with a 400 status before starting inference. For an overview of request limits, see the [Field support](/field-support#request-limits) documentation. When troubleshooting errors, make sure to log the response status, error `code`, and request ID—but never log your API keys.
+
+## Legacy API Endpoints
+
+The `/api/v1` and `/api/v2` endpoints continue to use FastAPI’s legacy error format (`{"detail": ...}`) until their retirement on September 20, 2026. For more information, visit the [Legacy API](/legacy/native-api) documentation.

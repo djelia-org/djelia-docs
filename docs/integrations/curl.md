@@ -15,7 +15,7 @@ curl https://api.djelia.cloud/openai/v1/audio/speech \
   -H "Authorization: Bearer $DJELIA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "djelia-tts-v2",
+    "model": "jifili-1",
     "input": "Aw ni ce, i ka kene wa?",
     "voice": "moussa"
   }' \
@@ -28,7 +28,7 @@ curl https://api.djelia.cloud/openai/v1/audio/speech \
 curl https://api.djelia.cloud/openai/v1/audio/transcriptions \
   -H "Authorization: Bearer $DJELIA_API_KEY" \
   -F file=@hello.mp3 \
-  -F model=djelia-asr-v2
+  -F model=sunjata-1
 ```
 
 ## Translating speech to French
@@ -37,7 +37,7 @@ curl https://api.djelia.cloud/openai/v1/audio/transcriptions \
 curl https://api.djelia.cloud/openai/v1/audio/translations \
   -H "Authorization: Bearer $DJELIA_API_KEY" \
   -F file=@hello.mp3 \
-  -F model=djelia-asr-v2 \
+  -F model=sunjata-1 \
   -F language=fra_Latn
 ```
 
@@ -50,7 +50,7 @@ curl https://api.djelia.cloud/openai/v1/chat/completions \
   -H "Authorization: Bearer $DJELIA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "djelia-translate-v1",
+    "model": "banjugu-1",
     "messages": [{"role": "user", "content": "Bonjour, comment allez-vous ?"}],
     "djelia": {"source_language": "fra_Latn", "target_language": "bam_Latn"}
   }'

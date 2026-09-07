@@ -28,7 +28,7 @@ client := openai.NewClient(
 ```go
 chat, err := client.Chat.Completions.New(context.TODO(),
 	openai.ChatCompletionNewParams{
-		Model: "djelia-translate-v1",
+		Model: "banjugu-1",
 		Messages: []openai.ChatCompletionMessageParamUnion{
 			openai.UserMessage("Bonjour, comment allez-vous ?"),
 		},
@@ -53,7 +53,7 @@ Voice: openai.AudioSpeechNewParamsVoiceUnion{OfString: openai.String("moussa")},
 
 ```go
 res, err := client.Audio.Speech.New(context.TODO(), openai.AudioSpeechNewParams{
-	Model: "djelia-tts-v2",
+	Model: "jifili-1",
 	Input: "Aw ni ce, i ka kene wa?",
 	Voice: openai.AudioSpeechNewParamsVoiceUnion{OfString: openai.String("moussa")},
 })

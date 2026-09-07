@@ -12,7 +12,7 @@ and point `api_base` at the compatibility surface.
 import litellm
 
 litellm.completion(
-    model="openai/djelia-translate-v1",
+    model="openai/banjugu-1",
     messages=[{"role": "user", "content": "Bonjour"}],
     extra_body={"djelia": {"source_language": "fra_Latn", "target_language": "bam_Latn"}},
     api_base="https://api.djelia.cloud/openai/v1",
@@ -20,14 +20,14 @@ litellm.completion(
 )
 
 litellm.transcription(
-    model="openai/djelia-asr-v2",
+    model="openai/sunjata-1",
     file=open("audio.mp3", "rb"),
     api_base="https://api.djelia.cloud/openai/v1",
     api_key="YOUR_DJELIA_API_KEY",
 )
 
 litellm.speech(
-    model="openai/djelia-tts-v2",
+    model="openai/jifili-1",
     input="Aw ni ce",
     voice="moussa",
     api_base="https://api.djelia.cloud/openai/v1",
@@ -43,17 +43,17 @@ The same three entries go in `config.yaml`:
 model_list:
   - model_name: djelia-translate
     litellm_params:
-      model: openai/djelia-translate-v1
+      model: openai/banjugu-1
       api_base: https://api.djelia.cloud/openai/v1
       api_key: os.environ/DJELIA_API_KEY
   - model_name: djelia-asr
     litellm_params:
-      model: openai/djelia-asr-v2
+      model: openai/sunjata-1
       api_base: https://api.djelia.cloud/openai/v1
       api_key: os.environ/DJELIA_API_KEY
   - model_name: djelia-tts
     litellm_params:
-      model: openai/djelia-tts-v2
+      model: openai/jifili-1
       api_base: https://api.djelia.cloud/openai/v1
       api_key: os.environ/DJELIA_API_KEY
 ```
@@ -67,7 +67,7 @@ exact charge:
 
 ```python
 litellm.register_model({
-    "openai/djelia-translate-v1": {
+    "openai/banjugu-1": {
         "input_cost_per_token": 0.00005,   # $/character
         "output_cost_per_token": 0.0,      # output is not metered
         "litellm_provider": "openai",
