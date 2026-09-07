@@ -22,7 +22,7 @@ The tables below clarify which fields Djelia fully supports, which it accepts fo
 
 The `pcm` format is headerless 16-bit signed little-endian mono at 24 kHz, just like OpenAI. For `l16_8000` and `l16_16000`, the same structure is used, but at 8 kHz and 16 kHz sample rates, respectively.
 
-For more control over speech sampling, use the [Djelia extensions](/extensions#speech-sampling). Note that the legacy `djelia.description` and `djelia.speaker` fields are not recognized by the `jifili-1` model. While `djelia.chunk_size` is checked for validity, it is not applied—Djelia automatically determines the optimal streamed chunk size for your output.
+For more control over speech sampling, use the [Djelia extensions](/extensions#speech-sampling-options). Note that the legacy `djelia.description` and `djelia.speaker` fields are not recognized by the `jifili-1` model. While `djelia.chunk_size` is checked for validity, it is not applied—Djelia automatically determines the optimal streamed chunk size for your output.
 
 ## `POST /audio/transcriptions`
 
