@@ -30,11 +30,10 @@ response = client.audio.speech.create(
 response.write_to_file("hello.mp3")
 ```
 
-This means you can use the official OpenAI SDKs exactly as they are, in every language they support. All tools and frameworks built on top of these SDKs—such as LiteLLM, LangChain, the Vercel AI SDK, n8n, Dify, and Open WebUI—work seamlessly with Djelia. There’s no need for a Djelia-specific library or any new learning curve beyond the model names.
+This means you can use the official OpenAI SDKs exactly as they are, in every language they support. All tools and frameworks built on top of these SDKs (such as LiteLLM, LangChain, the Vercel AI SDK, n8n, Dify, and Open WebUI) work seamlessly with Djelia.
 
 [Get started with the quickstart ->](/quickstart)
 
-New organizations begin with a prepaid wallet. Usage is billed by character for text or by audio duration, giving you transparent, flexible pricing.
 
 ## Available Models
 
