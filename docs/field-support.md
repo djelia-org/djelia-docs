@@ -13,7 +13,7 @@ The tables below clarify which fields Djelia fully supports, which it accepts fo
 | Field            | Status                                                                                                                               |
 |------------------|--------------------------------------------------------------------------------------------------------------------------------------|
 | `model`          | Use `jifili-1`                                                                                                                      |
-| `input`          | Supported. Maximum 1000 characters.                                                                                                  |
+| `input`          | Supported. Maximum 5000 characters on `jifili-1`; the legacy `djelia-tts-v1` and `djelia-tts-v2` models cap at 1000.                 |
 | `voice`          | `moussa`, `alloy`, `nova`, `coral`. The last three are OpenAI aliases that map to `moussa`. Any other value returns 400 `unsupported_voice`. |
 | `response_format`| `mp3` (default), `wav`, `pcm`, `opus`, `ulaw`, `alaw`, `l16_8000`, `l16_16000`, `fmp4`                                              |
 | `stream_format`  | `audio` (default) or `sse`                                                                                                          |
