@@ -40,6 +40,8 @@ If you send audio that exceeds the supported size for transcription, the server 
 
 Attempting to use an unsupported `response_format` with `jifili-1` triggers a 422 error with `code: "invalid_request"`. The list of supported formats can be found in the [Field support](/field-support) documentation.
 
+Sending a text longer than the model accepts triggers a 422 error with `code: "input_too_long"`. The limit is 5000 characters for `jifili-1` and 1000 characters for the legacy speech models; the message names the limit and the model.
+
 ## Running out of credit
 
 A 402 means the organisation's wallet lacks the balance for the request. Add credits at
