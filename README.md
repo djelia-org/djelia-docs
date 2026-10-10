@@ -14,9 +14,10 @@ npm run serve        # serve the production build
 
 ## Where the API reference comes from
 
-The pages under `/api` are generated from Djelia's own OpenAPI spec, so they cannot
-drift from what the API actually serves. They are **not** checked in: `npm run build`
-regenerates them every time.
+The pages under `/api` are generated from the selected OpenAPI spec. They are **not**
+checked in: `npm run build` removes the old reference and regenerates it every time.
+The reference is only as current as that spec; production uses the live API, while
+offline builds use the committed snapshot.
 
 By default the build reads the committed snapshot at `openapi/djelia.json`, which keeps
 a clone building without network access. Point `DJELIA_OPENAPI` at the live spec to
@@ -26,12 +27,34 @@ build against what is actually running:
 DJELIA_OPENAPI=https://api.djelia.cloud/v1/openapi.json npm run build
 ```
 
-Set that variable in CI. Refresh the snapshot occasionally so the offline fallback does
-not fall too far behind:
+Build, start, and `npm run gen-api-docs -- djelia` prepare the selected JSON spec in
+`openapi/.generated.json` (ignored by Git). If it has no `servers` entry, preparation
+adds `https://api.djelia.cloud` so request examples target the API instead of the
+docs host. Paths already contain `/openai/v1`; do not append it to the server URL.
+Explicit upstream servers are preserved. A failed live fetch stops the build rather
+than silently publishing the offline snapshot.
+
+Set `DJELIA_OPENAPI` in CI. Refresh the snapshot when the API changes so the offline
+reference does not advertise retired routes:
 
 ```bash
-curl -s https://api.djelia.cloud/v1/openapi.json -o openapi/djelia.json
+curl -fsS https://api.djelia.cloud/v1/openapi.json -o openapi/djelia.json
 ```
+
+Run `npm test`, `npm run build`, and `npm run typecheck` to validate a change. The
+snapshot was refreshed from the public API on October 10, 2026 and contains the six
+supported OpenAI-compatible routes. Historical native calls belong in the migration
+guide, not the generated API navigation.
+
+## Branding
+
+The navbar uses the same official Djelia artwork as the console, bundled locally
+so builds and page loads do not depend on the marketing site:
+
+- `static/img/logo.svg`: [dark artwork for light surfaces](https://www.djelia.cloud/images/djelia-logo-icon-dark.svg), also used as the favicon.
+- `static/img/logo-dark.svg`: [light artwork for dark surfaces](https://www.djelia.cloud/images/djelia-logo-icon.svg).
+
+Docusaurus switches between the two navbar assets with the selected theme.
 
 ## Deploying
 
