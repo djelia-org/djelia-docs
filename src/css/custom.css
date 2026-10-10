@@ -82,3 +82,8 @@
 article header h1 {
   letter-spacing: -0.02em;
 }
+
+/* Keep the detailed brand mark balanced with the navbar title. */
+.navbar__logo {
+  height: 24px;
+}

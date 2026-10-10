@@ -13,7 +13,8 @@ import { themes as prismThemes } from "prism-react-renderer";
  *
  * The checked-in copy is the fallback so a clone builds without network access.
  */
-const OPENAPI_SPEC = process.env.DJELIA_OPENAPI ?? "openapi/djelia.json";
+// Prepared from DJELIA_OPENAPI or the offline snapshot by the npm scripts.
+const OPENAPI_SPEC = "openapi/.generated.json";
 
 /**
  * Served at docs.djelia.cloud: the deploy workflow sets both variables and
@@ -106,6 +107,8 @@ const config: Config = {
       logo: {
         alt: "Djelia",
         src: "img/logo.svg",
+        srcDark: "img/logo-dark.svg",
+        height: 24,
       },
       items: [
         { to: "/quickstart", label: "Quickstart", position: "left" },

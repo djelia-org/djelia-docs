@@ -21,3 +21,6 @@ yarn-error.log*
 
 # Generated from the OpenAPI spec at build time
 /docs/api
+
+# OpenAPI input with the API server used by generated request examples
+/openapi/.generated.json
