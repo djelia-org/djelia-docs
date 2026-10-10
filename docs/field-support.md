@@ -13,8 +13,8 @@ The tables below clarify which fields Djelia fully supports, which it accepts fo
 | Field            | Status                                                                                                                               |
 |------------------|--------------------------------------------------------------------------------------------------------------------------------------|
 | `model`          | Use `jifili-1`                                                                                                                      |
-| `input`          | Supported. Maximum 1000 characters.                                                                                                  |
-| `voice`          | `moussa`, `alloy`, `nova`, `coral`. The last three are OpenAI aliases that map to `moussa`. Any other value returns 400 `unsupported_voice`. |
+| `input`          | Supported. Maximum 5000 characters                                                                                                   |
+| `voice`          | `moussa`, `alloy`, `nova`, `coral`. The last three are OpenAI aliases that map to `moussa`. Any other value returns 400.             |
 | `response_format`| `mp3` (default), `wav`, `pcm`, `opus`, `ulaw`, `alaw`, `l16_8000`, `l16_16000`, `fmp4`                                              |
 | `stream_format`  | `audio` (default) or `sse`                                                                                                          |
 | `speed`          | **Ignored**                                                                                                                          |
@@ -22,7 +22,7 @@ The tables below clarify which fields Djelia fully supports, which it accepts fo
 
 The `pcm` format is headerless 16-bit signed little-endian mono at 24 kHz, just like OpenAI. For `l16_8000` and `l16_16000`, the same structure is used, but at 8 kHz and 16 kHz sample rates, respectively.
 
-For more control over speech sampling, use the [Djelia extensions](/extensions#speech-sampling-options). Note that the legacy `djelia.description` and `djelia.speaker` fields are not recognized by the `jifili-1` model. While `djelia.chunk_size` is checked for validity, it is not applied—Djelia automatically determines the optimal streamed chunk size for your output.
+For more control over speech sampling, use the [Djelia extensions](/extensions#speech-sampling-options).
 
 ## `POST /audio/transcriptions`
 
@@ -95,8 +95,7 @@ output.
 
 ## Request Limits
 
-- Speech input accepts up to 1,000 characters.
-- The `djelia.chunk_size` parameter must be set between 0.1 and 2.0 seconds.
+- Speech input accepts up to 5,000 characters.
 - Translation requires that the source and target languages are different, and both must be valid supported codes.
 - Speech translation responses are available only in `json` or `text` formats.
 

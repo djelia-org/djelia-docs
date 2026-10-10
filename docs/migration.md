@@ -1,22 +1,19 @@
 ---
 sidebar_position: 6
 title: API migration guide
-description: Move from the Djelia SDKs and the native API to the OpenAI-compatible surface on api.djelia.cloud before September 20, 2026.
+description: Move from the Djelia SDKs and the native API, retired on September 20, 2026, to the OpenAI-compatible API on api.djelia.cloud.
 ---
 
 # API migration guide
 
-We're transitioning the Djelia API to a unified structure based on the widely adopted OpenAI API standard. This change streamlines integration—enabling you to leverage the extensive ecosystem of OpenAI SDKs available in many programming languages and tools.
+On September 20, 2026, the native Djelia API and the `djelia-*-v*` model names were retired. The only public API is now the OpenAI-compatible API at `https://api.djelia.cloud/openai/v1`, with the models `sunjata-1`, `jifili-1` and `banjugu-1`. You can call it with the official OpenAI SDKs.
 
-Alongside this update, we're introducing a clearer model naming system, as well as a new text-to-speech model: `jifili-1`.
+## What changed
 
-Legacy API endpoints and model names will be phased out soon. To ensure uninterrupted service, please migrate your integration to the new system by September 20, 2026.
-
-## What’s changing?
-
-- The new public API host is `https://api.djelia.cloud`. The legacy endpoint `https://djelia.cloud` will be discontinued after September 20, 2026.
-- Native routes `/v1`, `/v2`, and `/api/...` will be retired on September 20, 2026. Deprecated hosts and paths will return `Deprecation`, `Sunset`, and successor `Link` headers to help you transition smoothly.
-- Model names are now standardized—please use the new family models: `sunjata-1`, `jifili-1`, and `banjugu-1`.
+- The native endpoints `/v1/models/*` and `/v2/models/*`, and their `/api/v1` and `/api/v2` twins, were retired on September 20, 2026.
+- The model ids `djelia-asr-v1`, `djelia-asr-v2`, `djelia-asr-v3`, `djelia-tts-v1`, `djelia-tts-v2`, `djelia-tts-v3` and `djelia-translate-v1` were retired on the same date. See [Model names](#model-names).
+- `jifili-1` ignores `djelia.speaker`, `djelia.description` and `djelia.chunk_size`, and returns 400 for the formats `wav_8k`, `ulaw_8k`, `aac` and `flac`.
+- API requests go to `https://api.djelia.cloud`. The old host `https://djelia.cloud` still answers for now, with `Deprecation` and successor `Link` headers.
 
 | If you use | Do this |
 | --- | --- |
@@ -26,8 +23,33 @@ Legacy API endpoints and model names will be phased out soon. To ensure uninterr
 | A `djelia-*-v*` model | Replace it using [Model names](#model-names) |
 | `https://djelia.cloud` | Change API requests to `https://api.djelia.cloud` |
 
-Starting September 21, 2026, the only available public API will be `https://api.djelia.cloud/openai/v1`. 
-Please ensure your integration points to this endpoint to maintain uninterrupted access.
+## What an old call gets now
+
+A request that names a retired model returns HTTP 410 with `code: "model_retired"`:
+
+```json
+{
+  "error": {
+    "message": "The model `djelia-asr-v2` was retired on 2026-09-20. Use `sunjata-1` instead. Migration guide: https://docs.djelia.cloud/migration/",
+    "type": "invalid_request_error",
+    "param": "model",
+    "code": "model_retired"
+  }
+}
+```
+
+A request to a native endpoint returns HTTP 410 with `code: "endpoint_retired"`, whatever the method:
+
+```json
+{
+  "error": {
+    "message": "The native endpoint `POST /v1/models/translate` was retired on 2026-09-20. Use the OpenAI-compatible API at https://api.djelia.cloud/openai/v1 with the model `banjugu-1`. Migration guide: https://docs.djelia.cloud/migration/",
+    "type": "invalid_request_error",
+    "param": null,
+    "code": "endpoint_retired"
+  }
+}
+```
 
 ## Python
 
@@ -50,7 +72,7 @@ client = OpenAI(
 )
 ```
 
-To get started, install the `openai` package using `pip install openai`. While an upcoming release of the [Djelia Python SDK](https://github.com/djelia-org/djelia-python-sdk) will support the new API surface, we recommend using the official OpenAI SDK for a smoother and more future-proof integration.
+Install the `openai` package with `pip install openai`. The [Djelia Python SDK](https://github.com/djelia-org/djelia-python-sdk) calls the retired native endpoints, so it no longer works.
 
 ### Speech to text
 
@@ -106,7 +128,7 @@ print(
 ```
 
 - By default, non-streaming responses return an array of segments. To access timestamps, set `response_format=verbose_json` and use the `.segments` field; if you only need text, the default `json` format lets you read from `.text`.
-- The `temperature` parameter influences results when using `sunjata-1`. Please note that earlier models, such as `djelia-asr-v1` and `djelia-asr-v2`, do not support `temperature` and will ignore this setting.
+- `temperature` takes effect on `sunjata-1`.
 
 ### Text to speech
 
@@ -140,7 +162,6 @@ with client.audio.speech.with_streaming_response.create(
 
 - Update your code by renaming the `text` parameter to `input`, replacing the numeric `speaker` or `description` fields with `voice`, and changing `format` to `response_format`.
 - To receive raw audio chunks, simply add the argument `stream_format="audio"`.
-- For legacy support through September 19, 2026, continue using `djelia-tts-v1` with `extra_body={"djelia": {"speaker": 1}}`, or `djelia-tts-v2` with `extra_body={"djelia": {"description": "..."}}`.
 
 #### Without streaming
 
@@ -164,7 +185,7 @@ client.audio.speech.create(
 ```
 
 - Update your usage by renaming the `text` parameter to `input`, using `voice` instead of a numeric `speaker` or `description`, and changing `format` to `response_format`.
-- The `jifili-1` model supports the following `response_format` options: `mp3`, `wav`, `pcm`, `opus`, `ulaw`, `alaw`, `l16_8000`, `l16_16000`, and `fmp4`. Using any other value for `response_format` will result in a 422 error with `code: "invalid_request"`.
+- The `jifili-1` model supports the following `response_format` options: `mp3`, `wav`, `pcm`, `opus`, `ulaw`, `alaw`, `l16_8000`, `l16_16000`, and `fmp4`. Any other value returns a 400 error with `param: "response_format"`.
 
 ### Translation
 
@@ -225,7 +246,7 @@ const client = new OpenAI({
 });
 ```
 
-To get started, install the OpenAI SDK by running `npm install openai` (requires Node 18 or later). While the next release of the [Djelia JavaScript SDK](https://github.com/djelia-org/djelia-js-sdk) will align with this API, we currently recommend using the official OpenAI SDK for the best experience.
+Install the OpenAI SDK with `npm install openai` (Node 18 or later). The [Djelia JavaScript SDK](https://github.com/djelia-org/djelia-js-sdk) is no longer maintained and calls the retired native endpoints.
 
 ### Speech to text
 
@@ -281,7 +302,7 @@ console.log(transcript.text);
 ```
 
 - By default, non-streaming responses return an array of segments. If you need detailed segment timestamps, set `response_format: "verbose_json"` and access the `.segments` field. For simple transcripts, you can use the default `json` format and read `.text`.
-- The `temperature` parameter influences output only for the `sunjata-1` model. Older models like `djelia-asr-v1` and `djelia-asr-v2` do not respond to this setting.
+- `temperature` takes effect on `sunjata-1`.
 
 ### Text to speech
 
@@ -317,7 +338,6 @@ output.end();
 
 - Change the `text` field to `input`, use `voice` instead of a numeric `speaker` or a `description`, and update `format` to `response_format`.
 - Include `stream_format: "audio"` to receive raw audio data as a stream rather than as the default response.
-- For backwards compatibility until September 19, 2026, if you're using `djelia-tts-v1`, pass a top-level `djelia: { speaker: 1 }`, or if using `djelia-tts-v2`, pass `djelia: { description: "..." }`.
 
 #### Without streaming
 
@@ -342,7 +362,7 @@ fs.writeFileSync("speech.mp3", Buffer.from(await speech.arrayBuffer()));
 ```
 
 - Update your code to use `input` instead of `text`, specify `voice` in place of a numeric `speaker` or `description`, and use `response_format` rather than `format`.
-- The `jifili-1` model supports the following `response_format` values: `mp3`, `wav`, `pcm`, `opus`, `ulaw`, `alaw`, `l16_8000`, `l16_16000`, and `fmp4`. If you provide any other format, you'll receive a 422 error with `code: "invalid_request"`.
+- The `jifili-1` model supports the following `response_format` values: `mp3`, `wav`, `pcm`, `opus`, `ulaw`, `alaw`, `l16_8000`, `l16_16000`, and `fmp4`. Any other value returns a 400 error with `param: "response_format"`.
 
 ### Translation
 
@@ -385,7 +405,7 @@ After:
 OPENAI_BASE_URL=https://api.djelia.cloud/openai/v1
 ```
 
-Requests authenticate with `Authorization: Bearer $DJELIA_API_KEY` instead of the native `x-api-key` header.
+The examples send the key as `Authorization: Bearer $DJELIA_API_KEY`. The `x-api-key` header is also accepted on `/openai/v1`.
 
 ### Speech to text
 
@@ -428,7 +448,7 @@ curl "$OPENAI_BASE_URL/audio/transcriptions" \
 ```
 
 - By default, non-streaming responses are returned as arrays of segments. To access timestamps, add `-F response_format=verbose_json` and inspect the `.segments` field; for a simple transcript, stick with the default `json` format and read `.text`.
-- The `temperature` parameter can be adjusted for the `sunjata-1` model to control transcription randomness. Note that this setting is not supported by the legacy `djelia-asr-v1` and `djelia-asr-v2` models.
+- `temperature` takes effect on `sunjata-1`.
 
 ### Text to speech
 
@@ -459,7 +479,6 @@ curl -N "$OPENAI_BASE_URL/audio/speech" \
 
 - Update your payload by renaming `text` to `input`, and use `voice` in place of a numeric `speaker` or `description`. Change `format` to `response_format` for clarity.
 - To receive raw audio chunks, include `"stream_format": "audio"` in your request.
-- For legacy compatibility through September 19, 2026, if you're using `djelia-tts-v1`, set `"djelia": {"speaker": 1}` in the JSON body. For `djelia-tts-v2`, use `"djelia": {"description": "..."}`.
 
 #### Without streaming
 
@@ -481,7 +500,7 @@ curl "$OPENAI_BASE_URL/audio/speech" \
 ```
 
 - Update your request body by changing `text` to `input`, and use `voice` instead of a numeric `speaker` or `description`. Also, rename `format` to `response_format` for clarity.
-- The `jifili-1` model supports the following response formats: `mp3`, `wav`, `pcm`, `opus`, `ulaw`, `alaw`, `l16_8000`, `l16_16000`, and `fmp4`. If you specify any other value for `response_format`, the API will return a 422 error with `code: "invalid_request"`.
+- The `jifili-1` model supports the following response formats: `mp3`, `wav`, `pcm`, `opus`, `ulaw`, `alaw`, `l16_8000`, `l16_16000`, and `fmp4`. Any other value returns a 400 error with `param: "response_format"`.
 
 ### Translation
 
@@ -513,17 +532,17 @@ curl "$OPENAI_BASE_URL/chat/completions" \
 
 ## Model names
 
-| Retiring ID | Use instead | Note |
+| Old ID | Use instead | Status |
 | --- | --- | --- |
-| `djelia-asr-v1` | `sunjata-1` | Behavior changes; available through September 19, 2026 |
-| `djelia-asr-v2` | `sunjata-1` | Behavior changes and `temperature` takes effect; available through September 19, 2026 |
-| `djelia-asr-v3` | `sunjata-1` | Alias today; name-only change |
-| `djelia-tts-v1` | `jifili-1` | Numeric speakers change to `moussa`; available through September 19, 2026 |
-| `djelia-tts-v2` | `jifili-1` | Descriptions change to `moussa`; available through September 19, 2026 |
-| `djelia-tts-v3` | `jifili-1` | Alias today; name-only change |
-| `djelia-translate-v1` | `banjugu-1` | Alias today; name-only change |
+| `djelia-asr-v1` | `sunjata-1` | Retired on September 20, 2026; returns 410. `sunjata-1` behaves differently |
+| `djelia-asr-v2` | `sunjata-1` | Retired on September 20, 2026; returns 410. `sunjata-1` behaves differently and supports `temperature` |
+| `djelia-asr-v3` | `sunjata-1` | Retired on September 20, 2026; returns 410. Same model, new name |
+| `djelia-tts-v1` | `jifili-1` | Retired on September 20, 2026; returns 410. Numeric speakers became the voice `moussa` |
+| `djelia-tts-v2` | `jifili-1` | Retired on September 20, 2026; returns 410. Descriptions became the voice `moussa` |
+| `djelia-tts-v3` | `jifili-1` | Retired on September 20, 2026; returns 410. Same model, new name |
+| `djelia-translate-v1` | `banjugu-1` | Retired on September 20, 2026; returns 410. Same model, new name |
 
-Beginning September 20, 2026, the four legacy models will return a 404 error with `model_not_found`. OpenAI model names will continue to serve as aliases, while family names will clearly indicate the specific Djelia capability.
+A retired id returns 410 with `code: "model_retired"`, and the message names its replacement. OpenAI model names such as `whisper-1` and `tts-1` are still accepted as aliases; see [OpenAI model aliases](/models#openai-model-aliases).
 
 ## Errors
 
