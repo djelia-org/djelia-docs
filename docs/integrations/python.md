@@ -63,4 +63,4 @@ open("interview.srt", "w").write(srt)
 
 ## The `djelia` package
 
-The [`djelia` package on PyPI](https://github.com/djelia-org/djelia-python-sdk) was originally designed for the native `/api/v1` and `/api/v2` endpoints, which will be retired on September 20, 2026. The next version of the package will support the OpenAI-compatible API. In the meantime, we recommend using the `openai` package for new integrations—it is more thoroughly tested, better documented, and is the focus of the examples throughout these docs.
+The [`djelia` package on PyPI](https://github.com/djelia-org/djelia-python-sdk) calls the retired native API and no longer works. Use the `openai` package.

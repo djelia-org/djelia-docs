@@ -12,8 +12,11 @@ configuration:
 Authorization: Bearer YOUR_DJELIA_API_KEY
 ```
 
-The `x-api-key` header used by the [legacy API](/legacy/native-api) is also accepted on
-the compatibility surface, so a partially migrated integration keeps working.
+The `x-api-key` header is also accepted:
+
+```
+x-api-key: YOUR_DJELIA_API_KEY
+```
 
 Keys are created and revoked in the [Djelia Console](https://console.djelia.cloud).
 A key belongs to an organisation, and usage is billed against that organisation's

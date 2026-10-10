@@ -44,6 +44,4 @@ This means you can use the official OpenAI SDKs exactly as they are, in every la
 | Text to speech     | `POST /audio/speech`         | `jifili-1`   |
 | Text translation   | `POST /chat/completions`     | `banjugu-1`  |
 
-See the [Models page](/models) for the latest supported languages, voices, and output formats. If you currently use a `djelia-*-v*` model, please consult our [migration guide](/migration).
-
-Please note: the older `/api/v1` and `/api/v2` endpoints are deprecated and will be retired on September 20, 2026. Refer to the [model migration guide](/migration) and [Legacy API documentation](/legacy/native-api) for details. All new integrations should use `/openai/v1`.
+See the [Models page](/models) for supported languages, voices, and output formats. Coming from the native API or a `djelia-*-v*` model? See the [migration guide](/migration).

@@ -110,17 +110,9 @@ The `jifili-1` model accepts the following optional parameters:
 | `djelia.top_p`         | Greater than 0.0, up to and including 1.0 |
 | `djelia.repetition_penalty` | Greater than 0.0, up to 2.0            |
 
-Any omitted parameter will use the model server’s default value.  
-`jifili-1` uses the fixed voice `moussa` and does not support the deprecated `djelia.description` or `djelia.speaker` fields.
+Any omitted parameter will use the model server’s default value.
 
-**Voice behavior details:**
-- Until September 19, 2026, `djelia-tts-v1` selects voices using the numeric `djelia.speaker` and ignores `voice` and `djelia.description`.
-- `djelia-tts-v2` recognizes `djelia.description`.
-- `jifili-1` uses only the `voice` field.
-
-For `jifili-1`, the `moussa` voice is available along with OpenAI voice names mapped to it: `alloy`, `nova`, and `coral`. Any other name results in a 400 `unsupported_voice` error.
-
-The `djelia.chunk_size` field (0.1 to 2.0 seconds, default 1.0) is validated but ignored by `jifili-1`, as chunk size is determined by Djelia itself.
+The voice is set with the `voice` field. `jifili-1` serves `moussa`, and the OpenAI voice names `alloy`, `nova` and `coral` map to it. Any other voice returns a 400 error.
 
 ## Multipart Requests
 
